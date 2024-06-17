@@ -1,0 +1,67 @@
+.wrapper {
+    padding: 94px 48px 50px;
+}
+
+.title {
+    font-size: 3.4rem;
+    line-height: 4.4rem;
+    color: var(--brown);
+}
+
+.image {
+    border: 1px solid var(--border-color);
+    aspect-ratio: 1 / 1;
+
+    & img {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.description {
+    font-size: 1.4rem;
+    line-height: 2.4rem;
+    color: var(--brown);
+}
+
+.order-btn {
+    padding: 16px;
+    font-size: 3.4rem;
+    line-height: 4.4rem;
+    border-radius: 8px;
+}
+
+.size {
+    font-size: 1.4rem;
+}
+
+.size-btn {
+    padding: 5px 10px;
+    border-radius: 0;
+    font-weight: 400;
+
+    & ~ .size-btn {
+        margin-left: 5px;
+    }
+
+    &.active {
+        color: var(--primary);
+        background-color: var(--white);
+        border-color: var(--primary);
+    }
+    
+    &:hover {
+        color: var(--primary);
+        background-color: var(--white);
+        border-color: var(--primary);
+    }
+}
+
+.price {
+    font-size: 1.4rem;
+
+    & span {
+        color: var(--brown);
+    }
+}

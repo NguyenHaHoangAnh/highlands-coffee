@@ -1,0 +1,37 @@
+.wrapper {
+    padding: 18px 48px 24px;
+    background-color: var(--brown);
+    color: var(--white);
+    font-size: 1.3rem;
+    font-weight: 400;
+    font-family: 'Open Sans', sans-serif;
+    line-height: 2.4rem;
+}
+
+.social-link {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-color: var(--white);
+    color: var(--brown);
+    font-size: 1.6rem;
+    text-align: center;
+    transition: all 0.3s linear;
+
+    & ~ .social-link {
+        margin-left: 6px;
+    }
+
+    &:hover {
+        transform: translateY(-4px);
+    }
+}
+
+.footer-link {
+    transition: all 0.3s linear;
+    cursor: pointer;
+
+    &:hover {
+        color: var(--gold);
+    }
+}

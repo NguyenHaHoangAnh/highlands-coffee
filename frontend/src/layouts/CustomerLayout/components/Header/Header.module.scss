@@ -1,0 +1,148 @@
+.container {
+    position: relative;
+    display: flex;
+    padding: 14px 48px;
+    background-color: var(--primary);
+    border-top: 10px solid var(--brown);
+    z-index: 999;
+}
+
+// Logo
+.logo {
+    width: 110px;
+}
+
+// Search
+.search {
+    width: 450px;
+}
+
+.search-input {
+    margin: 0;
+    height: 42px;
+    
+    & ::placeholder {
+        font-style: italic;
+    }
+}
+
+.search-icon {
+    padding: 0 10px;
+    color: #808080;
+}
+
+.login-btn {
+    padding: 9px 16px;
+}
+
+// Nav
+.nav-list {
+    display: flex;
+    margin-bottom: -14px;
+}
+
+.nav-item {
+    margin-right: 10px;
+    font-size: 1.4rem;
+    line-height: 2.4rem;
+    color: var(--white);
+    cursor: pointer;
+    transition: all 0.3s linear;
+
+    &:has(.nav-item-link.active) {
+        background-color: var(--brown);
+    }
+
+    &:hover {
+        background-color: var(--brown);
+    }
+
+    &:hover .sub-nav-wrapper {
+        opacity: 1;
+        visibility: initial;
+    }
+    
+    &:has(.sub-nav-header.active) {
+        background-color: var(--brown);
+    }
+}
+
+.sub-nav-wrapper {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding: 14px 48px;
+    width: 100%;
+    background-color: var(--brown);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s linear;
+}
+
+.sub-nav-header {
+    padding: 0 12px;
+    font-size: 1.6rem;
+    color: var(--gold);
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: all 0.3s linear;
+    
+    &:hover {
+        color: var(--white);
+    }
+}
+
+.sub-nav-item {
+    position: relative;
+    margin-bottom: 6px;
+    font-size: 1.4rem;
+    font-weight: 400;
+    line-height: 2.2rem;
+    color: var(--white);
+    transition: all 0.3s linear;
+
+    & * {
+        text-transform: none;
+    }
+
+    &:hover {
+        padding-left: 10px;
+    }
+
+    &:hover::before {
+        opacity: 1;
+        visibility: initial;
+    }
+
+    &::before {
+        content: '\f0da';
+        position: absolute;
+        left: -12px;
+        transition: all 0.3s linear;
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+.sub-nav-item-with-image {
+    width: 184px;
+}
+
+.banner-menu {
+    padding: 14px;
+    background: url('../../../../assets/images/bgmenu.png');
+}
+
+.txt {
+    padding-right: 20%;
+    margin-bottom: 24px;
+    color: var(--gold);
+    font-size: 2rem;
+    line-height: 2.6rem;
+
+    & * {
+        text-transform: none;
+        text-align: left;
+    }
+}

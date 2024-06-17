@@ -1,0 +1,104 @@
+@import 'normalize.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    // Colors
+    --primary: #b22830;
+    --black: #000;
+    --white: #fff;
+    --brown: #53382c;
+    --gold: #f1bc7a;
+    --hover-color: #ffe3e4;
+    --border-color: #e8ebed;
+    --background-color: #f7f7f7;
+
+    // Fonts
+    --font-family: 'HighlandFont', sans-serif;
+
+    // Admin layout
+    --admin-layout-header-height: 60px;
+    --admin-layout-sidebar-width: 250px;
+
+    // Input height
+    --input-height: 44px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    font-family: var(--font-family);
+    font-size: 1.6rem;
+    line-height: 1.5;
+    text-rendering: optimizeSpeed;
+    color: var(--text-color);
+    overflow-y: overlay;
+}
+
+// Scrollbar CSS
+html *::-webkit-scrollbar {
+    border-radius: 0;
+    width: 8px;
+}
+
+html *::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(22, 24, 35, .06);
+}
+
+html *::-webkit-scrollbar-track {
+    border-radius: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+button, input, textarea, [tabindex] {
+    outline: none;
+    border: none;
+}
+
+input {
+    accent-color: var(--primary);
+    
+    &::-webkit-inner-spin-button {
+        -webkit-appearance: none;//* Clear default arrow */
+    } 
+    &::-webkit-outer-spin-button {
+        -webkit-appearance: none;//* Clear default arrow */
+    }
+}
+
+textarea {
+    resize: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+// Fonts embeded
+@font-face{
+    font-family: HighlandFont;
+    src: url('../../assets/fonts/Regular.woff2');
+    font-weight: 400;
+}
+
+@font-face{
+    font-family: HighlandFont;
+    src: url('../../assets/fonts/Bold.woff2');
+    font-weight: 600;
+}
+
+@font-face{
+    font-family: HighlandFont;
+    src: url('../../assets/fonts/Header.woff2');
+    font-weight: 700;
+}

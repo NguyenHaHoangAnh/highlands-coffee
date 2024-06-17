@@ -1,0 +1,73 @@
+.menu {
+    overflow: hidden;
+
+    &:nth-child(1) {
+        background: url('../../../assets/images/drinks_bg_0.png');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        color: #faebd7;
+    }
+    &:nth-child(2) {
+        background: url('../../../assets/images/drinks_bg_1.png');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        color: #006400;
+    }
+    &:nth-child(3) {
+        background: url('../../../assets/images/drinks_bg_2.png');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        color: var(--white);
+    }
+}
+
+.menu-wrapper {
+    max-width: 1200px;
+    padding: 0 16px;
+    margin: 0 auto;
+}
+
+.tend {
+    width: fit-content;
+    font-size: 4.4rem;
+    font-weight: 700;
+    line-height: 5.4rem;
+    text-transform: uppercase;
+    transition: all 0.3s linear;
+
+    &:hover {
+        color: var(--primary);
+    }
+}
+
+.description {
+    font-size: 1.8rem;
+    font-weight: 600;
+    line-height: 2.6rem;
+}
+
+.btn {
+    display: inline-block;
+    padding: 8px 70px;
+    text-transform: uppercase;
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+}
+
+.img-wrapper {
+    top: -94px;
+    cursor: pointer;
+}
+
+.menu {
+    &:nth-child(odd) .img-wrapper {
+        right: -6px;
+    }
+
+    &:nth-child(even) .img-wrapper {
+        left: -6px;
+    }
+}
