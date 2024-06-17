@@ -1,0 +1,14 @@
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const Tea = new Schema({
+    name: { type: String, default: '', required: true, },
+    image: { type: String, default: '', required: true, },
+    description: { type: String, default: '', required: true, },
+    small: { type: Object, default: {}, required: true, },
+    medium: { type: Object, default: {}, required: true, },
+    large: { type: Object, default: {}, required: true, },
+    created_at: { type: Date, default: Date.now },
+});
+
+module.exports = mongoose.model('Tea', Tea);
