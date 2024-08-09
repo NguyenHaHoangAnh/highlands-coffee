@@ -4,8 +4,9 @@ import styles from './AreaForm.module.scss';
 
 import Input from '~/components/Input';
 import CustomForm from "../CustomForm";
+import { inputHandler } from '~/middlewares/inputHandler';
 
-import * as areaService from '~/services/freezeService';
+import * as areaService from '~/services/areaService';
 
 const cx = classNames.bind(styles);
 
@@ -13,7 +14,7 @@ function AreaForm({ item, onClose = () => {}, updateData = () => {} }) {
     const [inputs, setInputs] = useState({
         name: item !== undefined ? item.name : '',
         address: item !== undefined ? item.address : '',
-        phone: item !== undefined ? item.phone : '',
+        phone_number: item !== undefined ? item.phone_number : '',
     });
 
     const handleInputChange = (e) => {
@@ -62,7 +63,7 @@ function AreaForm({ item, onClose = () => {}, updateData = () => {} }) {
                 className={cx('form-input')}
                 type='text'
                 placeholder='Địa chỉ'
-                label='Đại chỉ'
+                label='Địa chỉ'
                 inline
                 name='address'
                 value={inputs.address}
@@ -76,35 +77,10 @@ function AreaForm({ item, onClose = () => {}, updateData = () => {} }) {
                 placeholder='Số điện thoại'
                 label='SĐT'
                 inline
-                name='phone'
-                value={inputs.phone}
-                onChange={(e) => {
-                    let { name, value } = e.target;
-                    value =  value.replace(/[^0-9\s]/g, '');
-                    if (value.length === 4 || value.length === 9) 
-                        value += ' ';
-                    
-                    if (value.length < 13) {
-                        setInputs((prev) => ({
-                            ...prev,
-                            [name]: value,
-                        }));
-                    }
-                }}
-                onKeyDown={(e) => {
-                    if (e.key === ' ') {
-                        // Prevent press space key
-                        e.preventDefault();
-                    } else if (e.key === 'Backspace') {
-                        // Handle delete
-                        if (inputs.phone[inputs.phone.length - 1] === ' ') {
-                            setInputs((prev) => ({
-                                ...prev,
-                                phone: inputs.phone.slice(0, -1),
-                            }))
-                        }
-                    }
-                }}
+                name='phone_number'
+                maxLength={12}
+                value={inputHandler.phone(inputs.phone_number)}
+                onChange={handleInputChange}
             />
         </CustomForm>
     );

@@ -6,31 +6,19 @@ import Input from '~/components/Input';
 import Select from "~/components/Select";
 import CustomForm from "../CustomForm";
 
-import * as shopService from '~/services/freezeService';
+import { inputHandler } from '~/middlewares/inputHandler';
+
+import * as areaService from '~/services/areaService';
+import * as shopService from '~/services/shopService';
 
 const cx = classNames.bind(styles);
-
-const AREA = [
-    {
-        id: '1',
-        name: 'Hà Nội',
-    },
-    {
-        id: '2',
-        name: 'Hồ Chí Minh',
-    },
-    {
-        id: '3',
-        name: 'Đà Nẵng',
-    },
-];
 
 function ShopForm({ item, onClose = () => {}, updateData = () => {} }) {
     const [inputs, setInputs] = useState({
         name: item !== undefined ? item.name : '',
-        area: item !== undefined ? item.area : '',
+        area: item !== undefined ? item.area?.data?.name : '',
         address: item !== undefined ? item.address : '',
-        phone: item !== undefined ? item.phone : '',
+        phone_number: item !== undefined ? item.phone_number : '',
     });
     const [area, setArea] = useState()
 
@@ -41,15 +29,23 @@ function ShopForm({ item, onClose = () => {}, updateData = () => {} }) {
             [name]: value,
         }));
     }
+    
+    const fetchData = () => {
+        areaService
+            .getAllItem()
+            .then((data) => {
+                setArea(data.data);
+            })
+    }
 
     useEffect(() => {
-        setArea(AREA);
+        fetchData();
     }, []);
     
     
     const handleSubmit = () => {
         if (item === undefined) {
-            // console.log(inputs.birthday);
+            console.log('[shop form]', inputs);
             // Create
             // shopService
             //     .createItem(
@@ -87,6 +83,15 @@ function ShopForm({ item, onClose = () => {}, updateData = () => {} }) {
                 defaultValue={inputs.area || 'Chọn khu vực'}
                 label='Khu vực'
                 inline
+                optionLabel='name'
+                optionValue='_id'
+                onChange={(work_place_id) => {
+                    setInputs((prev) => ({
+                        ...prev,
+                        // eslint-disable-next-line no-useless-computed-key
+                        ['work_place']: work_place_id,
+                    }));
+                }}
             />
             <Input 
                 className={cx('form-input')}
@@ -106,35 +111,10 @@ function ShopForm({ item, onClose = () => {}, updateData = () => {} }) {
                 placeholder='Số điện thoại'
                 label='SĐT'
                 inline
-                name='phone'
-                value={inputs.phone}
-                onChange={(e) => {
-                    let { name, value } = e.target;
-                    value =  value.replace(/[^0-9\s]/g, '');
-                    if (value.length === 4 || value.length === 9) 
-                        value += ' ';
-                    
-                    if (value.length < 13) {
-                        setInputs((prev) => ({
-                            ...prev,
-                            [name]: value,
-                        }));
-                    }
-                }}
-                onKeyDown={(e) => {
-                    if (e.key === ' ') {
-                        // Prevent press space key
-                        e.preventDefault();
-                    } else if (e.key === 'Backspace') {
-                        // Handle delete
-                        if (inputs.phone[inputs.phone.length - 1] === ' ') {
-                            setInputs((prev) => ({
-                                ...prev,
-                                phone: inputs.phone.slice(0, -1),
-                            }))
-                        }
-                    }
-                }}
+                name='phone_number'
+                value={inputHandler.phone(inputs.phone_number)}
+                maxLength={12}
+                onChange={handleInputChange}
             />
         </CustomForm>
     );

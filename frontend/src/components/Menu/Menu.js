@@ -22,7 +22,7 @@ function Header({ title, onBack = () => {} }) {
 }
 
 function MenuItem({ data, onClick = () => {} }) {
-    const classes = cx('relative block w-full','menu-item', { 
+    const classes = cx('relative block flex justify-start w-full','menu-item', { 
         [`${data.className}`]: data.className,
     });
 

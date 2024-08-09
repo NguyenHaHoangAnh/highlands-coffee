@@ -1,20 +1,30 @@
+import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
-import { useState } from 'react';
 import styles from './Authentication.module.scss';
 
 import Input from '~/components/Input';
 import Button from '~/components/Button';
+import config from '~/config';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
+import { toast } from 'react-toastify';
+import { AuthUserContext } from '../../../../components/AuthUserProvider';
+
+import * as authService from '~/services/authService';
+import * as userService from '~/services/userService';
 
 const cx = classNames.bind(styles);
 
 function Authentication() {
     const [inputs, setInputs] = useState({
-        email: '',
+        username: '',
         password: '',
     });
     const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate();
+    const context = useContext(AuthUserContext);
+    
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -29,7 +39,31 @@ function Authentication() {
     }
 
     const handleSubmit = () => {
-
+        authService
+            .login(inputs.username, inputs.password)
+            .then((res) => {
+                if (res?.message) {
+                    toast.success(res?.message);
+                    // Save token & id in localhost
+                    window.localStorage.setItem('token', res.token);
+                    window.localStorage.setItem('id', res.id);
+                    // Get user by id
+                    userService
+                        .getUserById(res.id)
+                        .then((res) => {
+                            if (res?.message) {
+                                context.handleChangeUser(res?.data);
+                            } else {
+                                context.handleChangeUser();
+                            }
+                        })
+                    setTimeout(() => {
+                        navigate(config.routes.customer_home);
+                    }, 200);
+                } else {
+                    toast.error(res?.error);
+                }
+            });
     }
 
     return (
@@ -41,9 +75,9 @@ function Authentication() {
                     <Input 
                         className={cx('form-input')}
                         type='text' 
-                        placeholder='Email'
-                        name='name'
-                        value={inputs.email}
+                        placeholder='Username'
+                        name='username'
+                        value={inputs.username}
                         onChange={handleInputChange}
                     />
                     <Input 

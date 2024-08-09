@@ -1,24 +1,19 @@
 import * as httpRequest from '../utils/httpRequest';
 
-export const getAllItem = async () => {
+export const getAllItem = async (page, perPage) => {
     try {
-        const res = await httpRequest.get('coffee');
-        return res;
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-
-export const getItem = async ({ page, perPage }) => {
-    try {
-        const res = await httpRequest.get('coffee', {
-            params: {
-                page,
-                perPage,
-            }
-        });
-        return res;
+        if (!page && !perPage) {
+            const res = await httpRequest.get('coffee');
+            return res;
+        } else {
+            const res = await httpRequest.get('coffee', {
+                params: {
+                    page,
+                    perPage,
+                }
+            });
+            return res;
+        }
     } catch (error) {
         console.log(error);
     }
@@ -77,19 +72,6 @@ export const updateItem = async (id, name, image, description, priceS, priceM, p
 export const deleteItem = async (id) => {
     try {
         const res = await httpRequest.del(`coffee/delete/${id}`);
-        return res;
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-export const getPageCount = async ({ perPage }) => {
-    try {
-        const res = await httpRequest.get('coffee/page-count', {
-            params: {
-                perPage,
-            }
-        });
         return res;
     } catch (error) {
         console.log(error);

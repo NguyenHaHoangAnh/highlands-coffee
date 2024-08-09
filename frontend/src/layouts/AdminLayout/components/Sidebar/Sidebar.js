@@ -2,11 +2,12 @@ import classNames from "classnames/bind";
 import { useEffect, useRef, useState } from "react";
 import styles from './Sidebar.module.scss';
 
+import Button from '~/components/Button';
 import config from '~/config';
 import Menu from '../Menu';
 import MenuItem from '../MenuItem';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse, faLocationDot, faMugHot, faStore, faUserGroup } from "@fortawesome/free-solid-svg-icons";
+import { faDoorOpen, faHouse, faLocationDot, faMugHot, faStore, faUserGroup } from "@fortawesome/free-solid-svg-icons";
 
 const cx = classNames.bind(styles);
 
@@ -53,20 +54,17 @@ function Sidebar() {
 
     const toggleSubMenu = (e) => {
         const item = e.currentTarget.parentElement;
-        const subItems = item.childNodes[item.childNodes.length - 1]; // sub menu
 
         if (!item.classList.contains(cx('show-sub-menu'))) {
             item.classList.add(cx('show-sub-menu'));
-            item.style.height = `${item.offsetHeight + subItems.offsetHeight + 4}px`;
         } else {
             item.classList.remove(cx('show-sub-menu'));
-            item.style.height = `${item.offsetHeight - subItems.offsetHeight - 4}px`;
         }
     }
 
     return (
-        <div className={cx('wrapper')}>
-            <Menu ref={menuRef}>
+        <div className={cx('flex flex-col', 'wrapper')}>
+            <Menu className={cx('flex-1 overflow-auto')} ref={menuRef}>
                 <MenuItem className={cx('menu-item')} to={config.routes.admin_dashboard} icon={<FontAwesomeIcon icon={faHouse} />} title='Trang chủ' />
                 <MenuItem className={cx('menu-item')} to={config.routes.admin_area_management} icon={<FontAwesomeIcon icon={faLocationDot} />} title='Quản lý khu vực' />
                 <MenuItem className={cx('menu-item')} to={config.routes.admin_staff_management} icon={<FontAwesomeIcon icon={faUserGroup} />} title='Quản lý quản lý khu vực' />
@@ -78,8 +76,8 @@ function Sidebar() {
                         <MenuItem className={cx('sub-menu-item')} to={config.routes.admin_tea_management} title='Trà' />
                     </Menu>
                 </MenuItem>
-                <MenuItem className={cx('menu-item')} to={config.routes.admin_shop_management} icon={<FontAwesomeIcon icon={faStore} />} title='Quản lý quán' />
             </Menu>
+            <MenuItem className={cx('menu-item', 'separate')} to={config.routes.customer_home} icon={<FontAwesomeIcon icon={faDoorOpen} />} title='Thoát' />
         </div>
     );
 }

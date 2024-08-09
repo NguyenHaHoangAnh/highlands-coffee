@@ -1,5 +1,6 @@
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import styles from './StaffManagement.module.scss';
 
 import Breadcrumb from '~/components/Breadcrumb';
@@ -7,13 +8,15 @@ import Card from '~/components/Card';
 import Table from '~/components/Table';
 import Button from '~/components/Button';
 import Modal from '~/components/Modal';
+import Pagination from '~/components/Pagination';
 import StaffForm from '~/components/Form/StaffForm';
 import DeleteForm from '~/components/Form/DeleteForm';
 import config from '~/config';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faPen, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { inputHandler } from '~/middlewares/inputHandler'
 
-import * as freezeService from '~/services/freezeService';
+import * as userService from '~/services/userService';
 
 const cx = classNames.bind(styles);
 
@@ -36,75 +39,43 @@ const HEADER = [
     'Khu vực',
     'Số điện thoại',
     'Ngày tham gia',
+    'Ngày cập nhật',
     'Hành động',
 ];
 
-const DATA = [
-    {
-        _id: '1',
-        name: 'Nguyễn Văn A',
-        birthday: '06/04/2003',
-        gender: 'Nam',
-        role: 'area_manager',
-        work_place: 'Hà Nội',
-        phone: '0987 6543 21',
-        email: 'a@gmail.com',
-        password: '123',
-        created_at: '2024-01-26T',
-    },
-    {
-        _id: '2',
-        name: 'Nguyễn Văn B',
-        birthday: '14/08/2003',
-        gender: 'Nữ',
-        role: 'area_manager',
-        work_place: 'Hồ Chí Minh',
-        phone: '0987 6543 21',
-        email: 'a@gmail.com',
-        password: '123',
-        created_at: '2024-01-26T',
-    },
-    {
-        _id: '3',
-        name: 'Nguyễn Văn C',
-        birthday: '30/03/2003',
-        gender: 'Nam',
-        role: 'area_manager',
-        work_place: 'Đà Nẵng',
-        phone: '0987 6543 21',
-        email: 'a@gmail.com',
-        password: '123',
-        created_at: '2024-01-26T',
-    },
-];
+const PAGE = 1;
+const PER_PAGE = 5;
 
 function StaffManagement() {
+    // Query
+    const [params, setParams] = useSearchParams({ 'page': PAGE });
+    const page = Number(params.get('page')) || PAGE;
+
     const [data, setData] = useState();
     const [showModal,  setShowModal] = useState(false);
     const [isDelete,  setIsDelete] = useState(false);
     const [item, setItem] = useState();
 
-    const formatDate = (fullDate) => {
-        const date = fullDate.split('T').shift();
-        return date.split('-').reverse().join('/');
-    }
+    const [perPage, setPerPage] = useState(PER_PAGE);
+    const [pageCount, setPageCount] = useState();
     
     // Get data
-    const getData = () => {
-        // freezeService
-        //     .getAllItem()
-        //     .then(data => setData(data));
-        setData(DATA);
+    const fetchData = (page, perPage) => {
+        userService
+            .getAllAreaManager(page, perPage)
+            .then(data => {
+                setData(data.data);
+                setPageCount(data.pageCount);
+            });
     }
 
     useEffect(() => {
-        getData();
-    }, []);
+        fetchData(page, perPage);
+    }, [page, perPage]);
 
     // Update data when create or edit an item
-    const updateData = (newData) => {
-        setData(data => [...data, newData]);
-        getData();
+    const updateData = () => {
+        fetchData(page, perPage);
     }
 
     // Show modal
@@ -147,11 +118,12 @@ function StaffManagement() {
                         <tr key={item._id}>
                             <td>{index + 1}</td>
                             <td>{item.name}</td>
-                            <td>{item.birthday}</td>
+                            <td>{inputHandler.date(item.birthday)}</td>
                             <td>{item.gender}</td>
-                            <td>{item.work_place}</td>
-                            <td>{item.phone}</td>
-                            <td>{formatDate(item.created_at)}</td>
+                            <td>{item.work_place?.data?.name}</td>
+                            <td>{item.phone_number}</td>
+                            <td>{inputHandler.date(item.created_at)}</td>
+                            <td>{inputHandler.date(item.updated_at)}</td>
                             <td>
                                 <Button 
                                     className={cx('action-btn')} 
@@ -171,6 +143,12 @@ function StaffManagement() {
                         </tr>
                     ))}
                 </Table>
+                <Pagination 
+                    pageCount={pageCount} 
+                    page={page} 
+                    params={params}
+                    setParams={setParams}
+                />
                 <Button 
                     className={cx('mt-8', 'submit-btn')} 
                     primary 

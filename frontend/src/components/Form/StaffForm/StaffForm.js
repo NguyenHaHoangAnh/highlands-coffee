@@ -5,33 +5,21 @@ import styles from './StaffForm.module.scss';
 import Input from '~/components/Input';
 import Select from "~/components/Select";
 import CustomForm from "../CustomForm";
+import { inputHandler } from "~/middlewares/inputHandler";
+
+import * as areaService from '~/services/areaService';
 
 const cx = classNames.bind(styles);
-
-const AREA = [
-    {
-        id: '1',
-        name: 'Hà Nội',
-    },
-    {
-        id: '2',
-        name: 'Hồ Chí Minh',
-    },
-    {
-        id: '3',
-        name: 'Đà Nẵng',
-    },
-];
 
 function StaffForm({ item, role, onClose = () => {}, updateData = () => {}, service }) {
     const [inputs, setInputs] = useState({
         name: item !== undefined ? item.name : '',
-        birthday: item !== undefined ? item.birthday : '',
+        birthday: item !== undefined ? inputHandler.systemDate(item.birthday) : '',
         gender: item !== undefined ? item.gender : 'Nam',
         role: item !== undefined ? item.role : role,
-        work_place: item !== undefined ? item.work_place : '',
-        phone: item !== undefined ? item.phone : '',
-        email: item !== undefined ? item.email : '',
+        work_place: item !== undefined ? item.work_place?.data?.name : '',
+        phone_number: item !== undefined ? item.phone_number : '',
+        username: item !== undefined ? item.username : '',
         password: item !== undefined ? item.password : '',
     });
     const [displayRole, setDisplayRole] = useState(role);
@@ -44,22 +32,6 @@ function StaffForm({ item, role, onClose = () => {}, updateData = () => {}, serv
             [name]: value,
         }));
     }
-
-    const inputPhone = (value) => {
-        value = value.replace(/[^0-9\s]/g, '');
-        value = value.replaceAll(' ', '');
-        const len = value.length;
-
-        let count = 0;
-
-        for (let i = 1; i <= ((len % 4 === 0) ? Math.floor(len / 4) - 1 : Math.floor(len / 4)); i++) {
-            const position = i * 4 + count;
-            value = `${value.slice(0, position)} ${value.slice(position)}`;
-            count++;
-        }
-
-        return value;
-    }
     
     useEffect(() => {
         setDisplayRole(
@@ -69,9 +41,17 @@ function StaffForm({ item, role, onClose = () => {}, updateData = () => {}, serv
             ]).get(role)
         );
     }, [role]);
+    
+    const fetchData = () => {
+        areaService
+            .getAllItem()
+            .then((data) => {
+                setArea(data.data);
+            })
+    }
 
     useEffect(() => {
-        setArea(AREA);
+        fetchData();
     }, []);
     
     
@@ -119,14 +99,8 @@ function StaffForm({ item, role, onClose = () => {}, updateData = () => {}, serv
                         label='Ngày sinh'
                         inline
                         name='birthday'
-                        value={inputs.birthday.split('/').reverse().join('-')}
-                        onChange={(e) => {
-                            const { name, value } = e.target;
-                            setInputs((prev) => ({
-                                ...prev,
-                                [name]: value.split('-').reverse().join('/'),
-                            }))
-                        }}
+                        value={inputs.birthday}
+                        onChange={handleInputChange}
                     />
                     <div className='flex justify-around'>
                         <Input
@@ -137,14 +111,9 @@ function StaffForm({ item, role, onClose = () => {}, updateData = () => {}, serv
                             inline
                             small
                             name='gender'
+                            value='Nam'
                             checked={'Nam' === inputs.gender}
-                            onChange={(e) => {
-                                const { name } = e.target;
-                                setInputs((prev) => ({
-                                    ...prev,
-                                    [name]: 'Nam',
-                                }));
-                            }}
+                            onChange={handleInputChange}
                         />
                         <Input
                             id='staff-form-female'
@@ -154,14 +123,9 @@ function StaffForm({ item, role, onClose = () => {}, updateData = () => {}, serv
                             inline
                             small
                             name='gender'
+                            value='Nữ'
                             checked={'Nữ' === inputs.gender}
-                            onChange={(e) => {
-                                const { name } = e.target;
-                                setInputs((prev) => ({
-                                    ...prev,
-                                    [name]: 'Nữ',
-                                }));
-                            }}
+                            onChange={handleInputChange}
                         />
                     </div>
                 </div>
@@ -183,11 +147,13 @@ function StaffForm({ item, role, onClose = () => {}, updateData = () => {}, serv
                     defaultValue={inputs.work_place || 'Chọn khu vực'}
                     label='Khu vực'
                     inline
-                    onChange={(workPlace) => {
+                    optionLabel='name'
+                    optionValue='_id'
+                    onChange={(work_place_id) => {
                         setInputs((prev) => ({
                             ...prev,
                             // eslint-disable-next-line no-useless-computed-key
-                            ['work_place']: workPlace,
+                            ['work_place']: work_place_id,
                         }));
                     }}
                 />
@@ -198,38 +164,13 @@ function StaffForm({ item, role, onClose = () => {}, updateData = () => {}, serv
                 <Input 
                     className={cx('form-input')}
                     type='text'
-                    placeholder='Email'
-                    label='Email'
-                    inline
-                    name='email'
-                    value={inputs.email}
-                    onChange={handleInputChange}
-                />
-                <Input 
-                    className={cx('form-input')}
-                    type='text'
                     placeholder='Số điện thoại'
                     label='SĐT'
                     inline
-                    name='phone'
-                    value={inputPhone(inputs.phone)}
-                    onChange={(e) => {
-                        let { name, value } = e.target;
-                        value = inputPhone(value);
-
-                        if (value.replaceAll(' ', '').length <= 10) {
-                            setInputs((prev) => ({
-                                ...prev,
-                                [name]: value,
-                            }));
-                        }
-                    }}
-                    onKeyDown={(e) => {
-                        if (e.key === ' ') {
-                            // Prevent press space key
-                            e.preventDefault();
-                        } 
-                    }}
+                    name='phone_number'
+                    maxLength={12}
+                    value={inputHandler.phone(inputs.phone_number)}
+                    onChange={handleInputChange}
                 />
             </div>
 
@@ -238,11 +179,11 @@ function StaffForm({ item, role, onClose = () => {}, updateData = () => {}, serv
                 <Input 
                     className={cx('form-input')}
                     type='text'
-                    placeholder='Email'
-                    label='Email'
+                    placeholder='Username'
+                    label='Username'
                     inline
-                    name='email'
-                    value={inputs.email}
+                    name='username'
+                    value={inputs.username}
                     onChange={handleInputChange}
                 />
                 <Input 

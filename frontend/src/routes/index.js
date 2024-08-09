@@ -21,6 +21,8 @@ import { AdminLayout } from '~/layouts';
 
 // Không cần đăng nhập
 const publicRoutes = [
+    // Admin
+    { path: config.routes.admin_login, component: Admin_Authentication, layout: null },
     // Customer
     { path: config.routes.customer_home, component: Customer_Home },
     { path: config.routes.customer_drinks, component: Customer_Drinks },
@@ -28,9 +30,10 @@ const publicRoutes = [
     { path: config.routes.customer_coffee, component: Customer_Coffee },
     { path: config.routes.customer_tea, component: Customer_Tea },
     { path: config.routes.customer_drink, component: Customer_Drink },
-    
-    // Admin
-    { path: config.routes.admin_login, component: Admin_Authentication, layout: null },
+];
+
+// Phải đăng nhập, nếu không đăng nhập -> nhảy sang login
+const privateRoutes = [
     { path: config.routes.admin_dashboard, component: Admin_Dashboard, layout: AdminLayout },
     { path: config.routes.admin_profile, component: Admin_Profile, layout: AdminLayout },
     { path: config.routes.admin_area_management, component: Admin_AreaManagement, layout: AdminLayout },
@@ -39,11 +42,6 @@ const publicRoutes = [
     { path: config.routes.admin_freeze_management, component: Admin_DrinksManagement, layout: AdminLayout },
     { path: config.routes.admin_coffee_management, component: Admin_DrinksManagement, layout: AdminLayout },
     { path: config.routes.admin_tea_management, component: Admin_DrinksManagement, layout: AdminLayout },
-]
-
-// Phải đăng nhập, nếu không đăng nhập -> nhảy sang login
-const privateRoutes = [
-
-]
+];
 
 export { publicRoutes, privateRoutes }

@@ -14,6 +14,7 @@ import DeleteForm from '~/components/Form/DeleteForm';
 import config from '~/config';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faPen, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { inputHandler } from '~/middlewares/inputHandler';
 
 import * as coffeeService from '~/services/coffeeService';
 
@@ -38,6 +39,7 @@ const HEADER = [
     'Ảnh',
     'Tên',
     'Ngày tạo',
+    'Ngày cập nhật',
     'Hành động',
 ];
 
@@ -60,25 +62,13 @@ function CoffeeManagement() {
     const [perPage, setPerPage] = useState(PER_PAGE);
     const [pageCount, setPageCount] = useState();
 
-    const formatDate = (fullDate) => {
-        const date = fullDate.split('T').shift();
-        return date.split('-').reverse().join('/');
-    }
-
-    // Get page count
-    useEffect(() => {
-        coffeeService
-            .getPageCount({ perPage })
-            .then((data) => setPageCount(Number(data)))
-            .catch((error) => console.log('[COFFEE]', error));
-    }, [perPage]);
-
     // Get data
-    const getData = (page, perPage) => {
+    const fetchData = (page, perPage) => {
         coffeeService
-            .getItem({ page, perPage })
+            .getAllItem(page, perPage)
             .then((data) => {
-                setData(data);
+                setData(data.data);
+                setPageCount(data.pageCount)
                 // console.log('[COFFEE]', data);
             })
             .catch((error) => console.log('[COFFEE]', error));
@@ -86,13 +76,13 @@ function CoffeeManagement() {
     
     // Data change when page changed
     useEffect(() => {
-        getData(page, perPage);
+        fetchData(page, perPage);
     }, [page, perPage]);
 
     // Update data when add or edit an item
     const handleUpdateData = () => {
         // setData(callback(data, newData));
-        getData(page, perPage);
+        fetchData(page, perPage);
     }
 
     // Show modal
@@ -144,7 +134,8 @@ function CoffeeManagement() {
                             }}
                             ></td>
                             <td>{item.name}</td>
-                            <td>{formatDate(item.created_at)}</td>
+                            <td>{inputHandler.date(item.created_at)}</td>
+                            <td>{inputHandler.date(item.updated_at)}</td>
                             <td>
                                 <Button 
                                     className={cx('action-btn')} 

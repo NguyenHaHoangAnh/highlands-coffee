@@ -7,6 +7,5 @@ router.post('/create', coffeeController.create);
 router.put('/update/:id', coffeeController.update);
 router.delete('/delete/:id', coffeeController.delete);
 router.get('/', coffeeController.get);
-router.get('/page-count', coffeeController.getPageCount);
 
 module.exports = router

@@ -10,7 +10,10 @@
 
 .menu-item {
     position: relative;
-    height: 48px;
+    display: block;
+    width: 100%;
+    height: fit-content;
+    overflow: hidden;
     transition: all 0.3s linear;
 
     & ~ .menu-item {
@@ -35,18 +38,20 @@
 
     // Submenu
     &:has(.sub-menu) .sub-menu {
-        opacity: 0;
-        visibility: hidden;
+        max-height: 0;
     }
     
     &:has(.sub-menu).show-sub-menu .sub-menu {
-        opacity: 1;
-        visibility: initial;
+        max-height: 500px;
+    }
+
+    &.separate {
+        border-top: 1px solid var(--border-color);
     }
 }
 
 .sub-menu {
-    transition: all 0.2s linear;
+    transition: all 0.5s linear;
 }
 
 .sub-menu-item {

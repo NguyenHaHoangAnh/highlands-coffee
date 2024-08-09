@@ -1,5 +1,6 @@
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import styles from './AreaManagement.module.scss';
 
 import Breadcrumb from '~/components/Breadcrumb';
@@ -13,8 +14,9 @@ import DeleteForm from '~/components/Form/DeleteForm';
 import config from '~/config';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faPen, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { inputHandler } from '~/middlewares/inputHandler'
 
-import * as freezeService from '~/services/freezeService';
+import * as areaService from '~/services/areaService';
 
 const cx = classNames.bind(styles);
 
@@ -36,71 +38,43 @@ const HEADER = [
     'Địa chỉ',
     'Số điện thoại',
     'Ngày tạo',
+    'Ngày cập nhật',
     'Hành động',
-];
-
-const DATA = [
-    {
-        _id: '1',
-        name: 'Hà Nội',
-        manager: 'Nguyễn Văn A',
-        address: '234 Phạm Văn Đồng, Bắc Từ Liêm, Hà Nội',
-        phone: '0987 6543 21',
-        created_at: '2024-01-26T',
-    },
-    {
-        _id: '2',
-        name: 'Hồ Chí Minh',
-        manager: 'Nguyễn Văn B',
-        address: '1 Tôn Thất Thuyết, Bắc Từ Liêm, Hồ Chí Minh',
-        phone: '0987 6543 21',
-        created_at: '2024-01-26T',
-    },
-    {
-        _id: '3',
-        name: 'Đà Nẵng',
-        manager: 'Nguyễn Văn C',
-        address: '123 Nguyễn Văn Cừ, Bắc Từ Liêm, Đà Nẵng',
-        phone: '0987 6543 21',
-        created_at: '2024-01-26T',
-    },
 ];
 
 const PAGE = 1;
 const PER_PAGE = 5;
 
 function AreaManagement() {
+    // Query
+    const [params, setParams] = useSearchParams({ 'page': PAGE });
+    const page = Number(params.get('page')) || PAGE;
+
     const [data, setData] = useState();
     const [showModal, setShowModal] = useState(false);
     const [isDelete, setIsDelete] = useState(false);
     const [item, setItem] = useState();
 
-    // Pagination
-    const [page, setPage] = useState(PAGE);
     const [perPage, setPerPage] = useState(PER_PAGE);
     const [pageCount, setPageCount] = useState();
-
-    const formatDate = (fullDate) => {
-        const date = fullDate.split('T').shift();
-        return date.split('-').reverse().join('/');
-    }
     
     // Get data
-    const getData = () => {
-        // freezeService
-        //     .getAllItem()
-        //     .then(data => setData(data));
-        setData(DATA);
+    const fetchData = (page, perPage) => {
+        areaService
+            .getAllItem(page, perPage)
+            .then(data => {
+                setData(data.data);
+                setPageCount(data.pageCount);
+            });
     }
 
     useEffect(() => {
-        getData();
-    }, []);
+        fetchData(page, perPage);
+    }, [page, perPage]);
 
     // Update data when create or edit an item
-    const updateData = (newData) => {
-        setData(data => [...data, newData]);
-        getData();
+    const handleUpdateData = () => {
+        fetchData(page, perPage);
     }
 
     // Show modal
@@ -143,10 +117,11 @@ function AreaManagement() {
                         <tr key={item._id}>
                             <td>{index + 1}</td>
                             <td>{item.name}</td>
-                            <td>{item.manager}</td>
+                            <td>{item.area_manager?.data?.name}</td>
                             <td>{item.address}</td>
-                            <td>{item.phone}</td>
-                            <td>{formatDate(item.created_at)}</td>
+                            <td>{item.phone_number}</td>
+                            <td>{inputHandler.date(item.created_at)}</td>
+                            <td>{inputHandler.date(item.updated_at)}</td>
                             <td>
                                 <Button 
                                     className={cx('action-btn')} 
@@ -167,9 +142,10 @@ function AreaManagement() {
                     ))}
                 </Table>
                 <Pagination 
-                    pageCount={10} 
+                    pageCount={pageCount} 
                     page={page} 
-                    setPage={setPage}
+                    params={params}
+                    setParams={setParams}
                 />
                 <Button 
                     className={cx('mt-8', 'submit-btn')} 
@@ -187,13 +163,13 @@ function AreaManagement() {
                         <AreaForm 
                             item={item} 
                             onClose={handleCloseModal} 
-                            updateData={updateData}
+                            handleUpdateData={handleUpdateData}
                         />
                     ) : (
                         <DeleteForm 
                             item={item}
                             onClose={handleCloseModal}
-                            updateData={updateData}
+                            handleUpdateData={handleUpdateData}
                             service={''}
                         />
                     )}

@@ -16,6 +16,8 @@ function Select({
     label,
     inline = false,
     name,
+    optionLabel,
+    optionValue = optionLabel,
     onChange=() => {},
     ...otherProps
 }) {
@@ -23,8 +25,8 @@ function Select({
     const [value, setValue] = useState();
 
     const handleSelectItem = (item) => {
-        setValue(item.name);
-        onChange(item.name);
+        setValue(item[optionLabel]);
+        onChange(item[optionValue]);
     }
 
     return (
@@ -53,7 +55,7 @@ function Select({
                                         key={index}
                                         onClick={() => handleSelectItem(item)} 
                                     >
-                                        {item.name}
+                                        {item[optionLabel]}
                                     </li>
                                 ))}
                             </ul>
@@ -82,7 +84,7 @@ function Select({
                                     key={index}
                                     onClick={() => handleSelectItem(item)} 
                                 >
-                                    {item.name}
+                                    {item[optionLabel]}
                                 </li>
                             ))}
                         </ul>

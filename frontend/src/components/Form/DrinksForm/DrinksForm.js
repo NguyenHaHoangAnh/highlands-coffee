@@ -4,6 +4,7 @@ import styles from './DrinksForm.module.scss';
 
 import Input from '~/components/Input';
 import CustomForm from "../CustomForm";
+import { inputHandler } from "~/middlewares/inputHandler";
 
 const cx = classNames.bind(styles);
 
@@ -25,22 +26,6 @@ function DrinksForm({ item, onClose = () => {}, updateData = () => {}, service }
         }));
     }
 
-    const inputCurrency = (value) => {
-        value =  value.replace(/[^0-9\s]/g, '');
-        value = value.replaceAll(',', '');
-        const len = value.length;
-
-        let count = 0;
-        
-        for (let i = 1; i <= ((len % 3 === 0) ? Math.floor(len / 3) - 1 : Math.floor(len / 3)); i++) {
-            const position = - (i * 3 + count);
-            value = `${value.slice(0, position)},${value.slice(position)}`;
-            count++;
-        }
-
-        return value;
-    }
-
     const handleSubmit = () => {
         if (item === undefined) {
             // Create
@@ -49,9 +34,9 @@ function DrinksForm({ item, onClose = () => {}, updateData = () => {}, service }
                     inputs.name, 
                     inputs.image, 
                     inputs.description, 
-                    Number(String(inputs.priceS).replaceAll(',', '')),
-                    Number(String(inputs.priceM).replaceAll(',', '')),
-                    Number(String(inputs.priceL).replaceAll(',', '')),
+                    inputHandler.currencyToNumber(inputs.priceS),
+                    inputHandler.currencyToNumber(inputs.priceM),
+                    inputHandler.currencyToNumber(inputs.priceL),
                 )
                 .then(() => {
                     // console.log('[CREATE]', data);
@@ -66,9 +51,9 @@ function DrinksForm({ item, onClose = () => {}, updateData = () => {}, service }
                     inputs.name, 
                     inputs.image, 
                     inputs.description, 
-                    Number(String(inputs.priceS).replaceAll(',', '')),
-                    Number(String(inputs.priceM).replaceAll(',', '')),
-                    Number(String(inputs.priceL).replaceAll(',', '')),
+                    inputHandler.currencyToNumber(inputs.priceS),
+                    inputHandler.currencyToNumber(inputs.priceM),
+                    inputHandler.currencyToNumber(inputs.priceL),
                 )
                 .then(() => {
                     // console.log('[UPDATE]', data);
@@ -119,7 +104,6 @@ function DrinksForm({ item, onClose = () => {}, updateData = () => {}, service }
                         onChange={handleInputChange}
                     />
                     
-                    
                     <Input 
                         className={cx('form-input')}
                         type='text'
@@ -140,24 +124,9 @@ function DrinksForm({ item, onClose = () => {}, updateData = () => {}, service }
                             label='Size S'
                             inline
                             name='priceS'
-                            value={inputCurrency(String(inputs.priceS))}
-                            onChange={(e) => {
-                                let { name, value } = e.target;
-                                value =  inputCurrency(value);
-                                
-                                if (value.replaceAll(',', '').length < 10) {
-                                    setInputs((prev) => ({
-                                        ...prev,
-                                        [name]: value,
-                                    }));
-                                }
-                            }}
-                            onKeyDown={(e) => {
-                                if (e.key === ' ') {
-                                    // Prevent press space key
-                                    e.preventDefault();
-                                }
-                            }}
+                            maxLength={7}
+                            value={inputHandler.currency(inputs.priceS)}
+                            onChange={handleInputChange}
                         />
                         
                         <Input 
@@ -167,24 +136,9 @@ function DrinksForm({ item, onClose = () => {}, updateData = () => {}, service }
                             label='Size M'
                             inline
                             name='priceM'
-                            value={inputCurrency(String(inputs.priceM))}
-                            onChange={(e) => {
-                                let { name, value } = e.target;
-                                value =  inputCurrency(value);
-                                
-                                if (value.replaceAll(',', '').length < 10) {
-                                    setInputs((prev) => ({
-                                        ...prev,
-                                        [name]: value,
-                                    }));
-                                }
-                            }}
-                            onKeyDown={(e) => {
-                                if (e.key === ' ') {
-                                    // Prevent press space key
-                                    e.preventDefault();
-                                }
-                            }}
+                            maxLength={7}
+                            value={inputHandler.currency(inputs.priceM)}
+                            onChange={handleInputChange}
                         />
                         
                         <Input 
@@ -194,24 +148,9 @@ function DrinksForm({ item, onClose = () => {}, updateData = () => {}, service }
                             label='Size L'
                             inline
                             name='priceL'
-                            value={inputCurrency(String(inputs.priceL))}
-                            onChange={(e) => {
-                                let { name, value } = e.target;
-                                value =  inputCurrency(value);
-                                
-                                if (value.replaceAll(',', '').length < 10) {
-                                    setInputs((prev) => ({
-                                        ...prev,
-                                        [name]: value,
-                                    }));
-                                }
-                            }}
-                            onKeyDown={(e) => {
-                                if (e.key === ' ') {
-                                    // Prevent press space key
-                                    e.preventDefault();
-                                }
-                            }}
+                            maxLength={7}
+                            value={inputHandler.currency(inputs.priceL)}
+                            onChange={handleInputChange}
                         />
                     </div>
                 </div>

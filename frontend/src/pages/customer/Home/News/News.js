@@ -9,53 +9,27 @@ import Button from '~/components/Button';
 import Input from '~/components/Input';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar, faPaperPlane } from "@fortawesome/free-regular-svg-icons";
+import { Autoplay } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+
+import * as shopService from '~/services/shopService';
 
 const cx = classNames.bind(styles);
 
 function News() {
-    const [itemIndex, setItemIndex] = useState(0);
-    const sliderRef = useRef();
-    const isLoaded = useRef(false);
+    const [newShops, setNewShops] = useState();
 
-    const showNextInfo = () => {
-        setItemIndex(index => index + 1);
+    const fetchData = () => {
+        shopService.getAllItem()
+            .then((data) => {
+                setNewShops(data.data);
+            })
     }
 
     useEffect(() => {
-        const slider = sliderRef.current;
-        if (!isLoaded.current) {
-            const clone = slider.childNodes[0].cloneNode(true);
-            slider.appendChild(clone);
-
-            isLoaded.current = true
-        }
+        fetchData();
     }, []);
-    
-    useEffect(() => {
-        const slider = sliderRef.current;
-        const delay = 3000;
-        
-        const handleTransition = () => {
-            if (itemIndex === 4) {
-                slider.style.transition = 'none';
-                setItemIndex(0);
-            }
-        }
-        
-        slider.addEventListener('transitionend', handleTransition);
-        if (itemIndex !== 0 && slider.style.transition === 'none 0s ease 0s') {
-            slider.style.transition = 'all 0.3s linear';
-        }
-
-        const timerId = setInterval(() => {
-            showNextInfo();
-        }, delay);
-
-        return () => {
-            slider.removeEventListener('transitionend', handleTransition);
-            clearInterval(timerId);
-        }
-    }, [itemIndex]);
 
     return (
         <div className='w-full'>
@@ -66,38 +40,41 @@ function News() {
                             <h2>Quán mới</h2>
                         </div>
                         <div className={cx('w-full')}>
-                            <div 
-                                className={cx('w-full', 'flex', 'address-content')} 
-                                ref={sliderRef} 
-                                style={{
-                                    translate: `${-100 * itemIndex}%`,
-                                }}
-                            >
-                                {Array.from({ length: 4 }, (_, index) => (
-                                    <div 
-                                        className={cx('flex-grow-0', 'flex-shrink-0', 'w-full', 'address-content-wrapper')} 
-                                        key={index}
-                                    >
-                                        <ul>
-                                            <li className={cx('mb-4', 'address-content-info', 'address-content-header')}>
-                                                <Link to={config.routes.customer_home}>
-                                                    Hàm cá mập {index}
-                                                </Link>
-                                            </li>
-                                            <li className={cx('address-content-info')}>
-                                                <Link to={config.routes.customer_home}>
-                                                    Tầng 3, 1-3-5 Đinh Tiên Hoàng, Phường Hàng Trống, Quận Hoàn Kiếm, Hà Nội
-                                                </Link>
-                                            </li>
-                                            <li  className={cx('mt-4', 'address-content-info')}>
-                                                <Button className={cx('relative', 'address-content-btn')} to={config.routes.customer_home}>
-                                                    Tìm đường
-                                                </Button>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                ))}
-                            </div>
+                            {newShops && 
+                                <Swiper
+                                    modules={[Autoplay]}
+                                    slidesPerView={1}
+                                    loop={true}
+                                    autoplay={{
+                                        delay: 3000,
+                                        disableOnInteraction: false,
+                                    }}
+                                >
+                                    {newShops.map((item, index) => (
+                                        <SwiperSlide key={index}>
+                                            <div className={cx('float-right', 'address-content-wrapper')}>
+                                                <ul>
+                                                    <li className={cx('mb-4 font-semibold', 'address-content-info', 'address-content-header')}>
+                                                        <Link to={config.routes.customer_home}>
+                                                            {item.name}
+                                                        </Link>
+                                                    </li>
+                                                    <li className={cx('font-semibold', 'address-content-info')}>
+                                                        <Link to={config.routes.customer_home}>
+                                                            {item.address}
+                                                        </Link>
+                                                    </li>
+                                                    <li  className={cx('mt-4 font-semibold', 'address-content-info')}>
+                                                        <Button className={cx('relative', 'address-content-btn')} to={config.routes.customer_home}>
+                                                            Tìm đường
+                                                        </Button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </SwiperSlide>
+                                    ))}
+                                </Swiper>
+                            }
                         </div>
                     </div>
                 </div>

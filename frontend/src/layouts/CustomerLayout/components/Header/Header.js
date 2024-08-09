@@ -1,15 +1,20 @@
 import classNames from "classnames/bind";
 import { useContext } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import styles from './Header.module.scss';
 
 import images from '~/assets/images';
 import config from '~/config';
 import Button from "~/components/Button";
 import Input from "~/components/Input";
+import Menu from "~/components/Menu";
+import Image from "~/components/Image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRightFromBracket, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { AuthUserContext } from "~/components/AuthUserProvider";
+import { faFile, faUser } from "@fortawesome/free-regular-svg-icons";
 // import { HeaderContext } from "./HeaderContext";
+import { toast } from "react-toastify";
 
 const cx = classNames.bind(styles);
 
@@ -168,16 +173,57 @@ const MENU = [
     },
 ];
 
+const MENU_ITEMS = [
+    {
+        icon: <FontAwesomeIcon icon={faUser}/>,
+        title: 'Xem hồ sơ',
+        to: config.routes.admin_profile,
+    },
+    {
+        icon: <FontAwesomeIcon icon={faFile}/>,
+        title: 'Quản lý',
+        to: config.routes.admin_dashboard,
+    },
+    {
+        icon: <FontAwesomeIcon icon={faArrowRightFromBracket} />,
+        title: 'Đăng xuất',
+        to: config.routes.home,
+        className: 'separate',
+    },
+];
+
 function Header() {
     // const headerContext = useContext(HeaderContext);
+    const context = useContext(AuthUserContext);
+    const user = context && context?.user;
+    
+    const navigate = useNavigate();
 
     // const handleClick = (link) => {
     //     headerContext.handleLink(link);
     // };
+
+    // Handle logic
+    const handleMenuChange = (menuItem) => {
+        switch(menuItem.to) {
+            case config.routes.home:
+                toast.success('Đăng xuất thành công!');
+                localStorage.removeItem('token');
+                localStorage.removeItem('id');
+                context.handleChangeUser();
+                setTimeout(() => {
+                    navigate(config.routes.home);
+                }, 200);
+                break;
+            default:
+                break;
+        }
+    };
     
     return (
         <div className='w-full'>
             <div className={cx('container')}>
+                {/* Logo */}
                 <Link 
                     to={config.routes.customer_home} 
                     // onClick={() => handleClick(config.routes.customer_home)}
@@ -185,6 +231,7 @@ function Header() {
                     <img className={cx('logo')} src={images.white_logo} alt="Logo" />
                 </Link>
                 <div className='flex flex-1 flex-col items-end justify-between'>
+                    {/* Action */}
                     <div className='flex items-center'>
                         <div className={cx('search')}>
                             <Input
@@ -197,9 +244,34 @@ function Header() {
                                 </Button>
                             </Input>
                         </div>
-                        <Button className={cx('ml-4', 'login-btn')} secondary to={config.routes.admin_login}>Đăng nhập</Button>
+                        {/* Login */}
+                        {user ? (
+                            <div className='flex justify-end min-w-[210px] max-w-[250px]'>
+                                <div className='flex flex-col items-end'>
+                                    <span className='text-[14px] text-white font-semibold'>
+                                        {user.name}
+                                    </span>
+                                    <span className='text-[12px] text-gray-200 font-semibold capitalize'>
+                                        {user.role}
+                                    </span>
+                                </div>
+                                <Menu
+                                    className={cx('header-menu-list')}
+                                    items={MENU_ITEMS}
+                                    placement='bottom-end'
+                                    offset={[12, 16]}
+                                    onChange={handleMenuChange}
+                                    menuPopper={cx('header-menu-popper')}
+                                >
+                                    <Image className='ml-4 w-[40px] h-[40px] rounded-full' src={''} alt='avatar' />
+                                </Menu> 
+                            </div>
+                        ) : (
+                            <Button className={cx('ml-4', 'login-btn')} secondary to={config.routes.admin_login}>Đăng nhập</Button>
+                        )}
                     </div>
 
+                    {/* Nav */}
                     <ul className={cx('nav-list')}>
                         {MENU.map((item, index) => (
                             <li className={cx('nav-item')} key={index}>

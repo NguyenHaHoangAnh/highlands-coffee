@@ -50,7 +50,8 @@
     display: none !important;
     top: calc(100% + 6px);
     left: 0;
-    height: 160px;
+    height: fit-content;
+    max-height: 160px;
     padding-bottom: 8px;
     overflow-y: overlay;
 

@@ -14,6 +14,7 @@ import DeleteForm from '~/components/Form/DeleteForm';
 import config from '~/config';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faPen, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { inputHandler } from '~/middlewares/inputHandler';
 
 import * as freezeService from '~/services/freezeService';
 
@@ -38,6 +39,7 @@ const HEADER = [
     'Ảnh',
     'Tên',
     'Ngày tạo',
+    'Ngày cập nhật',
     'Hành động',
 ];
 
@@ -59,25 +61,13 @@ function FreezeManagement() {
     const [perPage, setPerPage] = useState(PER_PAGE);
     const [pageCount, setPageCount] = useState();
 
-    const formatDate = (fullDate) => {
-        const date = fullDate.split('T').shift();
-        return date.split('-').reverse().join('/');
-    }
-
-    // Get page count
-    useEffect(() => {
-        freezeService
-            .getPageCount({ perPage })
-            .then((data) => setPageCount(Number(data)))
-            .catch((error) => console.log('[FREEZE]', error));
-    }, [perPage]);
-
     // Get data
-    const getData = (page, perPage) => {
+    const fetchData = (page, perPage) => {
         freezeService
-            .getItem({ page, perPage })
+            .getAllItem(page, perPage)
             .then(data => {
-                setData(data);
+                setData(data.data);
+                setPageCount(data.pageCount);
                 // console.log('[FREEZE]', data);
             })
             .catch((error) => console.log('[FREEZE]', error));
@@ -85,13 +75,13 @@ function FreezeManagement() {
 
     // Data change when page change
     useEffect(() => {
-        getData(page, perPage);
+        fetchData(page, perPage);
     }, [page, perPage]);
 
     // Update data when add or edit an item
     const handleUpdateData = (newData, callback) => {
         // setData(callback(data, newData));
-        getData(page, perPage);
+        fetchData(page, perPage);
     }
 
     // Show modal
@@ -143,7 +133,8 @@ function FreezeManagement() {
                             }}
                             ></td>
                             <td>{item.name}</td>
-                            <td>{formatDate(item.created_at)}</td>
+                            <td>{inputHandler.date(item.created_at)}</td>
+                            <td>{inputHandler.date(item.updated_at)}</td>
                             <td>
                                 <Button 
                                     className={cx('action-btn')} 
