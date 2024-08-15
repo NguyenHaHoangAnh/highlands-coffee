@@ -1,6 +1,6 @@
 import classNames from "classnames/bind";
 import styles from './Select.module.scss';
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Popper from '~/components/Popper';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,29 +16,54 @@ function Select({
     label,
     inline = false,
     name,
+    value,
     optionLabel,
     optionValue = optionLabel,
+    readOnly = false,
     onChange=() => {},
     ...otherProps
 }) {
     const [isActive, setIsActive] = useState(false);
-    const [value, setValue] = useState();
+    const [selectedLabel, setSelectedLabel] = useState(defaultValue);
+    const [selectedValue, setSelectedValue] = useState(value || defaultValue);
+    const selectRef = useRef();
+
+    useEffect(() => {
+        const selectedItem = data.find((item) => item[optionValue] === selectedValue);
+        if (selectedItem) {
+            setSelectedLabel(selectedItem[optionLabel]);
+            setSelectedValue(selectedItem[optionValue]);
+        }
+    }, [data, optionLabel, optionValue, selectedValue]);
 
     const handleSelectItem = (item) => {
-        setValue(item[optionLabel]);
-        onChange(item[optionValue]);
+        setSelectedLabel(item[optionLabel]);
+        setSelectedValue(item[optionValue]);
+        // onChange(item[optionValue]);
     }
+
+    useEffect(() => {
+        if (selectRef.current) {
+            onChange(selectRef.current);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedValue, selectRef]);
 
     return (
         <>
             {label ? (
                 <div 
                     className={cx('wrapper', { inline })}
-                    onClick={() => setIsActive(!isActive)}
+                    onClick={() => {
+                        if (!readOnly) {
+                            setIsActive(!isActive);
+                        }
+                    }}
                 >
                     <label className={cx('font-semibold', 'label')} htmlFor={id}>{label}</label>
                     <div id={id} className={cx('container', className)}>
-                        <div className={cx('select-input')} {...otherProps}>{value || defaultValue}</div>
+                        <div className={cx('select-input')} {...otherProps}>{selectedLabel}</div>
+                        <input className='hidden' name={name} value={selectedValue} ref={selectRef} readOnly />
                         <FontAwesomeIcon 
                             className={cx('select-icon')} 
                             icon={isActive ? faChevronUp : faChevronDown} 
@@ -65,9 +90,14 @@ function Select({
             ) : (
                 <div 
                     className={cx('container', inline)}
-                    onClick={() => setIsActive(!isActive)}
+                    onClick={() => {
+                        if (!readOnly) {
+                            setIsActive(!isActive);
+                        }
+                    }}
                 >
-                    <div className={cx('select-input')} {...otherProps}>{value || defaultValue}</div>
+                    <div className={cx('select-input')} {...otherProps}>{selectedLabel}</div>
+                    <input className='hidden' name={name} value={selectedValue} ref={selectRef} readOnly />
                     <FontAwesomeIcon 
                         className={cx('select-icon')} 
                         icon={isActive ? faChevronUp : faChevronDown} 

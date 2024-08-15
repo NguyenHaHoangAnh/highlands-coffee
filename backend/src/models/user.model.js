@@ -13,17 +13,8 @@ const User = new Schema({
         data: { type: Object, required: false },
     },
     phone_number: { type: String, default: '', required: true },
-    created_at: { type: Date, default: Date.now },
-    updated_at: { type: Date, default: Date.now },
-});
-
-User.pre('save', function (next) {
-    const now = new Date();
-    this.updated_at = now;
-    if (!this.created_at) {
-        this.created_at = now;
-    }
-    next();
+    }, {
+    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
 });
 
 module.exports = mongoose.model('User', User);

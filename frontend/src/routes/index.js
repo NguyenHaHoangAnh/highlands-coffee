@@ -10,12 +10,18 @@ import Customer_Drink from '~/pages/customer/Drink';
 
 // Admin
 import Admin_Authentication from '~/pages/admin/components/Authentication';
-import Admin_Dashboard from '~/pages/admin/components/Dashboard';
 import Admin_Profile from '~/pages/admin/components/Profile';
-import Admin_AreaManagement from '~/pages/admin/components/AreaManagement';
-import Admin_StaffManagement from '~/pages/admin/components/StaffManagement';
-import Admin_ShopManagement from '~/pages/admin/components/ShopManagement';
-import Admin_DrinksManagement from '~/pages/admin/components/DrinksManagement';
+import Admin_Dashboard from '~/pages/admin/Boss/Dashboard';
+// Boss
+import Boss_AreaManagement from '~/pages/admin/Boss/AreaManagement';
+import Boss_AreaManagerManagement from '~/pages/admin/Boss/AreaManagerManagement';
+import Boss_ShopManagement from '~/pages/admin/Boss/ShopManagement';
+import Boss_DrinksManagement from '~/pages/admin/Boss/DrinksManagement';
+// Area Manager
+import Area_Manager_ShopManagement from '~/pages/admin/AreaManager/ShopManagement';
+import Area_Manager_ShopManagerManagement from '~/pages/admin/AreaManager/ShopManagerManagement';
+// Shop Manager
+import Shop_Manager_StaffManagement from '~/pages/admin/ShopManager/StaffManagement';
 
 import { AdminLayout } from '~/layouts';
 
@@ -34,14 +40,21 @@ const publicRoutes = [
 
 // Phải đăng nhập, nếu không đăng nhập -> nhảy sang login
 const privateRoutes = [
-    { path: config.routes.admin_dashboard, component: Admin_Dashboard, layout: AdminLayout },
     { path: config.routes.admin_profile, component: Admin_Profile, layout: AdminLayout },
-    { path: config.routes.admin_area_management, component: Admin_AreaManagement, layout: AdminLayout },
-    { path: config.routes.admin_staff_management, component: Admin_StaffManagement, layout: AdminLayout },
-    { path: config.routes.admin_shop_management, component: Admin_ShopManagement, layout: AdminLayout },
-    { path: config.routes.admin_freeze_management, component: Admin_DrinksManagement, layout: AdminLayout },
-    { path: config.routes.admin_coffee_management, component: Admin_DrinksManagement, layout: AdminLayout },
-    { path: config.routes.admin_tea_management, component: Admin_DrinksManagement, layout: AdminLayout },
+    { path: config.routes.admin_dashboard, component: Admin_Dashboard, layout: AdminLayout },
+    // Boss
+    { path: config.routes.boss_area_management, component: Boss_AreaManagement, layout: AdminLayout },
+    { path: config.routes.boss_area_manager_management, component: Boss_AreaManagerManagement, layout: AdminLayout },
+    { path: config.routes.boss_shop_management, component: Boss_ShopManagement, layout: AdminLayout },
+    { path: config.routes.boss_freeze_management, component: Boss_DrinksManagement, layout: AdminLayout },
+    { path: config.routes.boss_coffee_management, component: Boss_DrinksManagement, layout: AdminLayout },
+    { path: config.routes.boss_tea_management, component: Boss_DrinksManagement, layout: AdminLayout },
+    // Area Manager
+    { path: config.routes.area_manager_shop_management, component: Area_Manager_ShopManagement, layout: AdminLayout },
+    { path: config.routes.area_manager_shop_manager_management, component: Area_Manager_ShopManagerManagement, layout: AdminLayout },
+    // Shop Manager
+    { path: config.routes.shop_manager_staff_management, component: Shop_Manager_StaffManagement, layout: AdminLayout },
+
 ];
 
 export { publicRoutes, privateRoutes }

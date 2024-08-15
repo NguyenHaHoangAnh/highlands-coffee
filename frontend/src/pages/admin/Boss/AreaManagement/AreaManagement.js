@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import styles from './AreaManagement.module.scss';
 
+import AdminWrapper from '../../components/AdminWrapper';
 import Breadcrumb from '~/components/Breadcrumb';
 import Card from '~/components/Card';
 import Table from '~/components/Table';
@@ -109,7 +110,7 @@ function AreaManagement() {
     }
     
     return (
-        <div>
+        <AdminWrapper>
             <Breadcrumb header='Quản lý khu vực' data={BREADCRUMB} />
             <Card title='Khu vực'>
                 <Table header={HEADER}>
@@ -163,19 +164,19 @@ function AreaManagement() {
                         <AreaForm 
                             item={item} 
                             onClose={handleCloseModal} 
-                            handleUpdateData={handleUpdateData}
+                            updateData={handleUpdateData}
                         />
                     ) : (
                         <DeleteForm 
                             item={item}
                             onClose={handleCloseModal}
-                            handleUpdateData={handleUpdateData}
-                            service={''}
+                            updateData={handleUpdateData}
+                            service={areaService}
                         />
                     )}
                 </Modal>
             }
-        </div>
+        </AdminWrapper>
     );
 }
 

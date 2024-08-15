@@ -16,6 +16,7 @@ export const getAllItem = async (page, perPage) => {
         }
     } catch (error) {
         console.log(error);
+        return error.response.data;
     }
 }
 
@@ -41,6 +42,7 @@ export const createItem = async (name, image, description, priceS, priceM, price
         return res;
     } catch (error) {
         console.log(error);
+        return error.response.data;
     }
 }
 
@@ -66,6 +68,7 @@ export const updateItem = async (id, name, image, description, priceS, priceM, p
         return res;
     } catch (error) {
         console.log(error);
+        return error.response.data;
     }
 }
 
@@ -75,5 +78,6 @@ export const deleteItem = async (id) => {
         return res;
     } catch (error) {
         console.log(error);
+        return error.response.data;
     }
 }

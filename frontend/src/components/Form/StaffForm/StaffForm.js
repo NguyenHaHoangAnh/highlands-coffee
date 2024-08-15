@@ -1,53 +1,48 @@
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styles from './StaffForm.module.scss';
 
 import Input from '~/components/Input';
 import Select from "~/components/Select";
 import CustomForm from "../CustomForm";
 import { inputHandler } from "~/middlewares/inputHandler";
+import { toast } from 'react-toastify';
+import { AuthUserContext } from '~/components/AuthUserProvider';
 
-import * as areaService from '~/services/areaService';
+import * as shopService from '~/services/shopService';
 
 const cx = classNames.bind(styles);
 
 function StaffForm({ item, role, onClose = () => {}, updateData = () => {}, service }) {
+    const context = useContext(AuthUserContext);
+    const user = context && context?.user;
+    
     const [inputs, setInputs] = useState({
         name: item !== undefined ? item.name : '',
         birthday: item !== undefined ? inputHandler.systemDate(item.birthday) : '',
         gender: item !== undefined ? item.gender : 'Nam',
         role: item !== undefined ? item.role : role,
-        work_place: item !== undefined ? item.work_place?.data?.name : '',
+        work_place: item !== undefined ? item.work_place._id : ((user && user.role === 'shop_manager') ? user.work_place._id : ''),
         phone_number: item !== undefined ? item.phone_number : '',
         username: item !== undefined ? item.username : '',
         password: item !== undefined ? item.password : '',
     });
-    const [displayRole, setDisplayRole] = useState(role);
-    const [area, setArea] = useState()
+    const [shop, setShop] = useState()
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
+    const handleInputChange = (target) => {
+        const { name, value } = target;
         setInputs((prev) => ({
             ...prev,
             [name]: value,
         }));
     }
     
-    useEffect(() => {
-        setDisplayRole(
-            new Map([
-                ['area_manager',  'Quản lý khu vực'],
-                ['shop_manager',  'Quản lý cửa hàng'],
-            ]).get(role)
-        );
-    }, [role]);
-    
     const fetchData = () => {
-        areaService
+        shopService
             .getAllItem()
             .then((data) => {
-                setArea(data.data);
-            })
+                setShop(data.data);
+            });
     }
 
     useEffect(() => {
@@ -58,24 +53,55 @@ function StaffForm({ item, role, onClose = () => {}, updateData = () => {}, serv
     const handleSubmit = () => {
         if (item === undefined) {
             // Create
-            // service
-            //     .createItem(
-            //         inputs.name, 
-            //     )
-            //     .then((data) => {
-            //         updateData(data);
-            //     })
-            console.log('[STAFF FORM]', inputs);
+            service
+                .createItem(
+                    inputs.name,
+                    inputs.birthday,
+                    inputs.gender,
+                    inputs.role,
+                    inputs.work_place,
+                    inputs.phone_number,
+                    inputs.username,
+                    inputs.password,
+                )
+                .then((data) => {
+                    if (data?.message) {
+                        updateData();
+                        toast.success(data?.message);
+                    } else {
+                        toast.error(data?.error);
+                    }
+                });
         } else {
             // Update
-            console.log('[STAFF FORM]', inputs);
-        }
+            service
+                .updateItem(
+                    item._id,
+                    inputs.name,
+                    inputs.birthday,
+                    inputs.gender,
+                    inputs.role,
+                    inputs.work_place,
+                    inputs.phone_number,
+                    inputs.username,
+                    inputs.password,
+                )
+                .then((data) => {
+                    if (data?.message) {
+                        updateData();
+                        toast.success(data?.message);
+                    } else {
+                        toast.error(data?.error);
+                    }
+                });
+            }
+        // console.log('[STAFF FORM]', inputs);
         onClose();
     }
     
     return (
         <CustomForm 
-            title='Thông tin quản lý khu vực' 
+            title='Thông tin nhân viên' 
             onClose={onClose} 
             onSubmit={handleSubmit}
         >
@@ -84,12 +110,12 @@ function StaffForm({ item, role, onClose = () => {}, updateData = () => {}, serv
                 <Input 
                     className={cx('form-input')}
                     type='text'
-                    placeholder='Tên khu vực'
+                    placeholder='Tên'
                     label='Tên'
                     inline
                     name='name'
                     value={inputs.name}
-                    onChange={handleInputChange}
+                    onChange={(e) => handleInputChange(e.target)}
                 />
                 <div className='grid grid-cols-2 gap-16'>
                     <Input 
@@ -100,7 +126,7 @@ function StaffForm({ item, role, onClose = () => {}, updateData = () => {}, serv
                         inline
                         name='birthday'
                         value={inputs.birthday}
-                        onChange={handleInputChange}
+                        onChange={(e) => handleInputChange(e.target)}
                     />
                     <div className='flex justify-around'>
                         <Input
@@ -113,7 +139,7 @@ function StaffForm({ item, role, onClose = () => {}, updateData = () => {}, serv
                             name='gender'
                             value='Nam'
                             checked={'Nam' === inputs.gender}
-                            onChange={handleInputChange}
+                            onChange={(e) => handleInputChange(e.target)}
                         />
                         <Input
                             id='staff-form-female'
@@ -125,7 +151,7 @@ function StaffForm({ item, role, onClose = () => {}, updateData = () => {}, serv
                             name='gender'
                             value='Nữ'
                             checked={'Nữ' === inputs.gender}
-                            onChange={handleInputChange}
+                            onChange={(e) => handleInputChange(e.target)}
                         />
                     </div>
                 </div>
@@ -138,24 +164,21 @@ function StaffForm({ item, role, onClose = () => {}, updateData = () => {}, serv
                     label='Chức vụ'
                     inline
                     name='role'
-                    value={displayRole}
+                    value='Nhân viên'
                     readOnly
                 />
                 <Select 
                     className={cx('form-input')}
-                    data={area}
-                    defaultValue={inputs.work_place || 'Chọn khu vực'}
-                    label='Khu vực'
+                    data={shop}
+                    name='work_place'
+                    value={inputs.work_place}
+                    defaultValue={item?.work_place?.data?.name || 'Chọn quán'}
+                    label='Quán'
                     inline
                     optionLabel='name'
                     optionValue='_id'
-                    onChange={(work_place_id) => {
-                        setInputs((prev) => ({
-                            ...prev,
-                            // eslint-disable-next-line no-useless-computed-key
-                            ['work_place']: work_place_id,
-                        }));
-                    }}
+                    readOnly={user && (user.role === 'shop_manager')}
+                    onChange={handleInputChange}
                 />
             </div>
 
@@ -170,7 +193,7 @@ function StaffForm({ item, role, onClose = () => {}, updateData = () => {}, serv
                     name='phone_number'
                     maxLength={12}
                     value={inputHandler.phone(inputs.phone_number)}
-                    onChange={handleInputChange}
+                    onChange={(e) => handleInputChange(e.target)}
                 />
             </div>
 
@@ -184,7 +207,7 @@ function StaffForm({ item, role, onClose = () => {}, updateData = () => {}, serv
                     inline
                     name='username'
                     value={inputs.username}
-                    onChange={handleInputChange}
+                    onChange={(e) => handleInputChange(e.target)}
                 />
                 <Input 
                     className={cx('form-input')}
@@ -194,7 +217,7 @@ function StaffForm({ item, role, onClose = () => {}, updateData = () => {}, serv
                     inline
                     name='password'
                     value={inputs.password}
-                    onChange={handleInputChange}
+                    onChange={(e) => handleInputChange(e.target)}
                 />
             </div>
         </CustomForm>

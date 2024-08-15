@@ -1,7 +1,7 @@
 export const inputHandler = {
     currency(value) {
         if (!value)
-            return;
+            return '';
         value = value.toString();
         value =  value.replace(/[^0-9\s]/g, '');
         value = value.replaceAll(',', '');
@@ -11,7 +11,7 @@ export const inputHandler = {
 
     phone(value) {
         if (!value)
-            return;
+            return '';
         value = value.toString();
         value = value.replace(/[^0-9\s]/g, '');
         value = value.replaceAll(' ', '');
@@ -30,20 +30,20 @@ export const inputHandler = {
 
     currencyToNumber(value) {
         if (!value)
-            return;
+            return '';
         return Number(String(value).replaceAll(',', ''));
     },
 
     date(value) {
         if (!value)
-            return;
+            return '';
         const date = value.split('T').shift();
         return date.split('-').reverse().join('/');
     },
 
     systemDate(value) {
         if (!value)
-            return;
+            return '';
         const date = value.split('T').shift();
         return date.split('/').reverse().join('-');
     }

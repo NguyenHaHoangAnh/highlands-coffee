@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import FreezeManagement from "./FreezeManagement";
 import CoffeeManagement from "./CoffeeManagement";
 import TeaManagement from "./TeaManagement";
+import AdminWrapper from "../../components/AdminWrapper";
 
 function DrinksManagement() {
     let url = window.location.href.split('/').pop();
@@ -20,9 +21,9 @@ function DrinksManagement() {
     }, [url]);
 
     return (
-        <div>
+        <AdminWrapper>
             {children}
-        </div>
+        </AdminWrapper>
     );
 }
 

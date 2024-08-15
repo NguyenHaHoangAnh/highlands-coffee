@@ -26,8 +26,8 @@ function Authentication() {
     const context = useContext(AuthUserContext);
     
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
+    const handleInputChange = (target) => {
+        const { name, value } = target;
         setInputs((prev) => ({
             ...prev,
             [name]:  value,
@@ -78,7 +78,7 @@ function Authentication() {
                         placeholder='Username'
                         name='username'
                         value={inputs.username}
-                        onChange={handleInputChange}
+                        onChange={(e) => handleInputChange(e.target)}
                     />
                     <Input 
                         className={cx('form-input')}
@@ -86,7 +86,7 @@ function Authentication() {
                         placeholder='Mật khẩu'
                         name='password'
                         value={inputs.password}
-                        onChange={handleInputChange}
+                        onChange={(e) => handleInputChange(e.target)}
                     >
                         <Button className={cx('input-btn')} onClick={handleShowPassword}>
                             <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />

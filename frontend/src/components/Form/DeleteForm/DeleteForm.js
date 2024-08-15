@@ -4,8 +4,7 @@ import styles from './DeleteForm.module.scss';
 import Button from '~/components/Button';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-
-// import * as areaService from '~/services/freezeService';
+import { toast } from "react-toastify";
 
 const cx = classNames.bind(styles);
 
@@ -13,12 +12,13 @@ function DeleteForm({ item, onClose = () => {}, updateData = () => {}, service }
     const handleSubmit = () => {
         service
             .deleteItem(item._id)
-            .then(() => {
-                // console.log('[DELETE]', item);
-                // updateData(_, (prevData, _) => (
-                //     prevData.filter((prevItem) => (prevItem._id) !== item._id)
-                // ));
-                updateData();
+            .then((data) => {
+                if (data?.message) {
+                    updateData();
+                    toast.success(data?.message);
+                } else {
+                    toast.error(data?.error);
+                }
             })
         onClose();
     }

@@ -8,22 +8,21 @@ const route = {
     customer_drink: '/:drink',
 
     // Admin
-    // Authentication
     admin_login: '/dang-nhap',
-    // Dashboard
-    admin_dashboard: '/trang-chu',
-    // Profile
     admin_profile: '/ho-so',
-    // Area management
-    admin_area_management: '/quan-ly-khu-vuc',
-    // Staff management
-    admin_staff_management: '/quan-ly-nhan-vien',
-    // Shop management
-    admin_shop_management: '/quan-ly-quan',
-    // Drinks management
-    admin_freeze_management: '/quan-ly-thuc-don/freeze',
-    admin_coffee_management: '/quan-ly-thuc-don/ca-phe',
-    admin_tea_management: '/quan-ly-thuc-don/tra',
+    admin_dashboard: '/trang-chu',
+    // Boss
+    boss_area_management: '/quan-ly-khu-vuc',
+    boss_area_manager_management: '/quan-ly-quan-ly-khu-vuc',
+    boss_shop_management: '/quan-ly-quan',
+    boss_freeze_management: '/quan-ly-thuc-don/freeze',
+    boss_coffee_management: '/quan-ly-thuc-don/ca-phe',
+    boss_tea_management: '/quan-ly-thuc-don/tra',
+    // Area Manager
+    area_manager_shop_management: '/quan-ly-quan',
+    area_manager_shop_manager_management: '/quan-ly-quan-ly-quan',
+    // Shop Manager
+    shop_manager_staff_management: '/quan-ly-nhan-vien',
 };
 
 export default route;

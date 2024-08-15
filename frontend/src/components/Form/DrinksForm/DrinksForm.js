@@ -5,6 +5,7 @@ import styles from './DrinksForm.module.scss';
 import Input from '~/components/Input';
 import CustomForm from "../CustomForm";
 import { inputHandler } from "~/middlewares/inputHandler";
+import { toast } from 'react-toastify';
 
 const cx = classNames.bind(styles);
 
@@ -18,8 +19,8 @@ function DrinksForm({ item, onClose = () => {}, updateData = () => {}, service }
         priceL: item !== undefined ? item.large.price : '',
     });
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
+    const handleInputChange = (target) => {
+        const { name, value } = target;
         setInputs((prev) => ({
             ...prev,
             [name]: value,
@@ -38,10 +39,13 @@ function DrinksForm({ item, onClose = () => {}, updateData = () => {}, service }
                     inputHandler.currencyToNumber(inputs.priceM),
                     inputHandler.currencyToNumber(inputs.priceL),
                 )
-                .then(() => {
-                    // console.log('[CREATE]', data);
-                    // updateData(data, (prevData, newData) => ([newData, ...prevData]));
-                    updateData();
+                .then((data) => {
+                    if (data?.message) {
+                        updateData();
+                        toast.success(data?.message);
+                    } else {
+                        toast.error(data?.error);
+                    }
                 })
         } else {
             // Update
@@ -55,16 +59,13 @@ function DrinksForm({ item, onClose = () => {}, updateData = () => {}, service }
                     inputHandler.currencyToNumber(inputs.priceM),
                     inputHandler.currencyToNumber(inputs.priceL),
                 )
-                .then(() => {
-                    // console.log('[UPDATE]', data);
-                    // updateData(data, (prevData, newData) => (
-                    //     prevData.forEach((item, index) => {
-                    //         if (item._id === newData._id) {
-                    //             prevData[index] = newData;
-                    //         }
-                    //     })
-                    // ));
-                    updateData();
+                .then((data) => {
+                    if (data?.message) {
+                        updateData();
+                        toast.success(data?.message);
+                    } else {
+                        toast.error(data?.error);
+                    }
                 })
         }
         onClose();
@@ -90,7 +91,7 @@ function DrinksForm({ item, onClose = () => {}, updateData = () => {}, service }
                         inline
                         name='name'
                         value={inputs.name}
-                        onChange={handleInputChange}
+                        onChange={(e) => handleInputChange(e.target)}
                     />
                     
                     <Input 
@@ -101,7 +102,7 @@ function DrinksForm({ item, onClose = () => {}, updateData = () => {}, service }
                         inline
                         name='image'
                         value={inputs.image}
-                        onChange={handleInputChange}
+                        onChange={(e) => handleInputChange(e.target)}
                     />
                     
                     <Input 
@@ -113,7 +114,7 @@ function DrinksForm({ item, onClose = () => {}, updateData = () => {}, service }
                         big
                         name='description'
                         value={inputs.description}
-                        onChange={handleInputChange}
+                        onChange={(e) => handleInputChange(e.target)}
                     />
                     
                     <div className='grid grid-cols-3 gap-8'>
@@ -126,7 +127,7 @@ function DrinksForm({ item, onClose = () => {}, updateData = () => {}, service }
                             name='priceS'
                             maxLength={7}
                             value={inputHandler.currency(inputs.priceS)}
-                            onChange={handleInputChange}
+                            onChange={(e) => handleInputChange(e.target)}
                         />
                         
                         <Input 
@@ -138,7 +139,7 @@ function DrinksForm({ item, onClose = () => {}, updateData = () => {}, service }
                             name='priceM'
                             maxLength={7}
                             value={inputHandler.currency(inputs.priceM)}
-                            onChange={handleInputChange}
+                            onChange={(e) => handleInputChange(e.target)}
                         />
                         
                         <Input 
@@ -150,7 +151,7 @@ function DrinksForm({ item, onClose = () => {}, updateData = () => {}, service }
                             name='priceL'
                             maxLength={7}
                             value={inputHandler.currency(inputs.priceL)}
-                            onChange={handleInputChange}
+                            onChange={(e) => handleInputChange(e.target)}
                         />
                     </div>
                 </div>

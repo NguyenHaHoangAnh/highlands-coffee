@@ -16,5 +16,54 @@ export const getAllItem = async (page, perPage) => {
         }
     } catch (error) {
         console.log(error);
+        return error.response.data;
+    }
+}
+
+export const getAvailableItem = async () => {
+    try {
+        const res = await httpRequest.get('area/available');
+        return res;
+    } catch (error) {
+        console.log(error);
+        return error.response.data;
+    }
+}
+
+export const createItem = async (name, address, phone_number) => {
+    try {
+        const res = await httpRequest.post('area/create', {
+            name,
+            address,
+            phone_number
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+        return error.response.data;
+    }
+}
+
+export const updateItem = async (id, name, address, phone_number) => {
+    try {
+        const res = await httpRequest.put(`area/update/${id}`, {
+            name,
+            address,
+            phone_number
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+        return error.response.data;
+    }
+}
+
+export const deleteItem = async (id) => {
+    try {
+        const res = await httpRequest.del(`area/delete/${id}`);
+        return res;
+    } catch (error) {
+        console.log(error);
+        return error.response.data;
     }
 }

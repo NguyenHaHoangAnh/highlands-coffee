@@ -5,6 +5,7 @@ import styles from './AreaForm.module.scss';
 import Input from '~/components/Input';
 import CustomForm from "../CustomForm";
 import { inputHandler } from '~/middlewares/inputHandler';
+import { toast } from 'react-toastify';
 
 import * as areaService from '~/services/areaService';
 
@@ -17,8 +18,8 @@ function AreaForm({ item, onClose = () => {}, updateData = () => {} }) {
         phone_number: item !== undefined ? item.phone_number : '',
     });
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
+    const handleInputChange = (target) => {
+        const { name, value } = target;
         setInputs((prev) => ({
             ...prev,
             [name]: value,
@@ -29,15 +30,37 @@ function AreaForm({ item, onClose = () => {}, updateData = () => {} }) {
         if (item === undefined) {
             // console.log(inputs);
             // Create
-            // areaService
-            //     .createItem(
-            //         inputs.name, 
-            //     )
-            //     .then((data) => {
-            //         updateData(data);
-            //     })
+            areaService
+                .createItem(
+                    inputs.name, 
+                    inputs.address,
+                    inputs.phone_number
+                )
+                .then((data) => {
+                    if (data?.message) {
+                        updateData();
+                        toast.success(data?.message);
+                    } else {
+                        toast.error(data?.error);
+                    }
+                });
         } else {
             // Update
+            areaService
+                .updateItem(
+                    item._id,
+                    inputs.name, 
+                    inputs.address,
+                    inputs.phone_number
+                )
+                .then((data) => {
+                    if (data?.message) {
+                        updateData();
+                        toast.success(data?.message);
+                    } else {
+                        toast.error(data?.error);
+                    }
+                });
         }
         onClose();
     }
@@ -57,7 +80,7 @@ function AreaForm({ item, onClose = () => {}, updateData = () => {} }) {
                 inline
                 name='name'
                 value={inputs.name}
-                onChange={handleInputChange}
+                onChange={(e) => handleInputChange(e.target)}
             />
             <Input 
                 className={cx('form-input')}
@@ -67,7 +90,7 @@ function AreaForm({ item, onClose = () => {}, updateData = () => {} }) {
                 inline
                 name='address'
                 value={inputs.address}
-                onChange={handleInputChange}
+                onChange={(e) => handleInputChange(e.target)}
             />
             
             <h3 className={cx('font-semibold uppercase mb-4', 'form-header')}>Thông tin liên hệ</h3>
@@ -80,7 +103,7 @@ function AreaForm({ item, onClose = () => {}, updateData = () => {} }) {
                 name='phone_number'
                 maxLength={12}
                 value={inputHandler.phone(inputs.phone_number)}
-                onChange={handleInputChange}
+                onChange={(e) => handleInputChange(e.target)}
             />
         </CustomForm>
     );

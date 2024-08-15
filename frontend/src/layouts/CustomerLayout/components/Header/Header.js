@@ -16,6 +16,8 @@ import { faFile, faUser } from "@fortawesome/free-regular-svg-icons";
 // import { HeaderContext } from "./HeaderContext";
 import { toast } from "react-toastify";
 
+import * as authService from '~/services/authService';
+
 const cx = classNames.bind(styles);
 
 const MENU = [
@@ -192,6 +194,14 @@ const MENU_ITEMS = [
     },
 ];
 
+const ROLE = {
+    admin: 'Admin',
+    boss: 'Chủ tịch',
+    area_manager: 'Quản lý khu vực',
+    shop_manager: 'Quản lý quán',
+    staff: 'Nhân viên',
+};
+
 function Header() {
     // const headerContext = useContext(HeaderContext);
     const context = useContext(AuthUserContext);
@@ -207,13 +217,22 @@ function Header() {
     const handleMenuChange = (menuItem) => {
         switch(menuItem.to) {
             case config.routes.home:
-                toast.success('Đăng xuất thành công!');
-                localStorage.removeItem('token');
-                localStorage.removeItem('id');
-                context.handleChangeUser();
-                setTimeout(() => {
-                    navigate(config.routes.home);
-                }, 200);
+                // Log out
+                authService
+                    .logout()
+                    .then((data) => {
+                        if (data?.message) {
+                            toast.success(data?.message);
+                            localStorage.removeItem('token');
+                            localStorage.removeItem('id');
+                            context.handleChangeUser();
+                            setTimeout(() => {
+                                navigate(config.routes.customer_home);
+                            }, 200);
+                        } else {
+                            toast.error(data?.error);
+                        }
+                    });
                 break;
             default:
                 break;
@@ -252,7 +271,7 @@ function Header() {
                                         {user.name}
                                     </span>
                                     <span className='text-[12px] text-gray-200 font-semibold capitalize'>
-                                        {user.role}
+                                        {ROLE[user.role.toLowerCase()]}
                                     </span>
                                 </div>
                                 <Menu

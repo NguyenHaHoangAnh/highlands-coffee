@@ -18,8 +18,8 @@ function ProfileForm({ item, onClose = () => {}, updateData = () => {} }) {
         phone: item !== undefined ? item.phone : '',
     });
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
+    const handleInputChange = (target) => {
+        const { name, value } = target;
         setInputs((prev) => ({
             ...prev,
             [name]: value,
@@ -59,7 +59,7 @@ function ProfileForm({ item, onClose = () => {}, updateData = () => {} }) {
                 small
                 name='name'
                 value={inputs.name}
-                onChange={handleInputChange}
+                onChange={(e) => handleInputChange(e.target)}
             />
             <div className='flex justify-between w-2/5'>
                 <Input

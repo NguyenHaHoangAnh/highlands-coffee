@@ -9,17 +9,8 @@ const Area = new Schema({
         _id: { type: mongoose.Schema.Types.ObjectId, required: false },
         data: { type: Object, required: false },
     },
-    created_at: { type: Date, default: Date.now },
-    updated_at: { type: Date, default: Date.now },
-});
-
-Area.pre('save', function (next) {
-    const now = new Date();
-    this.updated_at = now;
-    if (!this.created_at) {
-        this.created_at = now;
-    }
-    next();
+    }, {
+    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
 });
 
 module.exports = mongoose.model('Area', Area);

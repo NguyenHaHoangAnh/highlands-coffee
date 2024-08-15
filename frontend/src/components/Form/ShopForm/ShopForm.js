@@ -1,12 +1,13 @@
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styles from './ShopForm.module.scss';
 
 import Input from '~/components/Input';
 import Select from "~/components/Select";
 import CustomForm from "../CustomForm";
-
+import { toast } from 'react-toastify';
 import { inputHandler } from '~/middlewares/inputHandler';
+import { AuthUserContext } from '~/components/AuthUserProvider';
 
 import * as areaService from '~/services/areaService';
 import * as shopService from '~/services/shopService';
@@ -14,16 +15,18 @@ import * as shopService from '~/services/shopService';
 const cx = classNames.bind(styles);
 
 function ShopForm({ item, onClose = () => {}, updateData = () => {} }) {
+    const context = useContext(AuthUserContext);
+    const user = context && context?.user;
     const [inputs, setInputs] = useState({
         name: item !== undefined ? item.name : '',
-        area: item !== undefined ? item.area?.data?.name : '',
+        area: item !== undefined ? item.area?._id : ((user && user.role === 'area_manager') ? user.work_place._id : ''),
         address: item !== undefined ? item.address : '',
         phone_number: item !== undefined ? item.phone_number : '',
     });
-    const [area, setArea] = useState()
+    const [area, setArea] = useState();
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
+    const handleInputChange = (target) => {
+        const { name, value } = target;
         setInputs((prev) => ({
             ...prev,
             [name]: value,
@@ -44,18 +47,42 @@ function ShopForm({ item, onClose = () => {}, updateData = () => {} }) {
     
     
     const handleSubmit = () => {
+        console.log('[shop form]', inputs);
         if (item === undefined) {
-            console.log('[shop form]', inputs);
             // Create
-            // shopService
-            //     .createItem(
-            //         inputs.name, 
-            //     )
-            //     .then((data) => {
-            //         updateData(data);
-            //     })
+            shopService
+                .createItem(
+                    inputs.name, 
+                    inputs.area, 
+                    inputs.address, 
+                    inputs.phone_number, 
+                )
+                .then((data) => {
+                    if (data?.message) {
+                        updateData();
+                        toast.success(data?.message);
+                    } else {
+                        toast.error(data?.error);
+                    }
+                });
         } else {
             // Update
+            shopService
+                .updateItem(
+                    item._id,
+                    inputs.name, 
+                    inputs.area, 
+                    inputs.address, 
+                    inputs.phone_number, 
+                )
+                .then((data) => {
+                    if (data?.message) {
+                        updateData();
+                        toast.success(data?.message);
+                    } else {
+                        toast.error(data?.error);
+                    }
+                });
         }
         onClose();
     }
@@ -75,23 +102,20 @@ function ShopForm({ item, onClose = () => {}, updateData = () => {} }) {
                 inline
                 name='name'
                 value={inputs.name}
-                onChange={handleInputChange}
+                onChange={(e) => handleInputChange(e.target)}
             />
             <Select 
                 className={cx('form-input')}
                 data={area}
-                defaultValue={inputs.area || 'Chọn khu vực'}
+                name='area'
+                value={inputs.area}
+                defaultValue={item?.area?.data?.name || 'Chọn khu vực'}
                 label='Khu vực'
                 inline
                 optionLabel='name'
                 optionValue='_id'
-                onChange={(work_place_id) => {
-                    setInputs((prev) => ({
-                        ...prev,
-                        // eslint-disable-next-line no-useless-computed-key
-                        ['work_place']: work_place_id,
-                    }));
-                }}
+                readOnly={user && (user.role === 'area_manager')}
+                onChange={handleInputChange}
             />
             <Input 
                 className={cx('form-input')}
@@ -101,7 +125,7 @@ function ShopForm({ item, onClose = () => {}, updateData = () => {} }) {
                 inline
                 name='address'
                 value={inputs.address}
-                onChange={handleInputChange}
+                onChange={(e) => handleInputChange(e.target)}
             />
 
             <h3 className={cx('font-semibold uppercase mb-4', 'form-header')}>Thông tin liên lạc</h3>
@@ -114,7 +138,7 @@ function ShopForm({ item, onClose = () => {}, updateData = () => {} }) {
                 name='phone_number'
                 value={inputHandler.phone(inputs.phone_number)}
                 maxLength={12}
-                onChange={handleInputChange}
+                onChange={(e) => handleInputChange(e.target)}
             />
         </CustomForm>
     );

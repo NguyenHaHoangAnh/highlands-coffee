@@ -8,17 +8,8 @@ const Tea = new Schema({
     small: { type: Object, default: {}, required: true, },
     medium: { type: Object, default: {}, required: true, },
     large: { type: Object, default: {}, required: true, },
-    created_at: { type: Date, default: Date.now },
-    updated_at: { type: Date, default: Date.now },
-});
-
-Tea.pre('save', function (next) {
-    const now = new Date();
-    this.updated_at = now;
-    if (!this.created_at) {
-        this.created_at = now;
-    }
-    next();
+    }, {
+    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
 });
 
 module.exports = mongoose.model('Tea', Tea);

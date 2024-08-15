@@ -1,15 +1,16 @@
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import styles from './StaffManagement.module.scss';
+import styles from './ShopManagerManagement.module.scss';
 
+import AdminWrapper from '../../components/AdminWrapper';
 import Breadcrumb from '~/components/Breadcrumb';
 import Card from '~/components/Card';
 import Table from '~/components/Table';
 import Button from '~/components/Button';
 import Modal from '~/components/Modal';
 import Pagination from '~/components/Pagination';
-import StaffForm from '~/components/Form/StaffForm';
+import ShopManagerForm from '~/components/Form/ShopManagerForm';
 import DeleteForm from '~/components/Form/DeleteForm';
 import config from '~/config';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -27,7 +28,7 @@ const BREADCRUMB = [
         icon: faHouse,
     },
     {
-        title: 'Quản lý quản lý khu vực',
+        title: 'Quản lý quản lý quán',
     },
 ];
 
@@ -36,7 +37,8 @@ const HEADER = [
     'Tên',
     'Ngày sinh',
     'Giới tính',
-    'Khu vực',
+    'Tên quán',
+    'Địa chỉ',
     'Số điện thoại',
     'Ngày tham gia',
     'Ngày cập nhật',
@@ -46,7 +48,7 @@ const HEADER = [
 const PAGE = 1;
 const PER_PAGE = 5;
 
-function StaffManagement() {
+function ShopManagerManagement() {
     // Query
     const [params, setParams] = useSearchParams({ 'page': PAGE });
     const page = Number(params.get('page')) || PAGE;
@@ -62,7 +64,7 @@ function StaffManagement() {
     // Get data
     const fetchData = (page, perPage) => {
         userService
-            .getAllAreaManager(page, perPage)
+            .getAllShopManager(page, perPage)
             .then(data => {
                 setData(data.data);
                 setPageCount(data.pageCount);
@@ -110,8 +112,8 @@ function StaffManagement() {
     }
 
     return (
-        <div>
-            <Breadcrumb header='Quản lý quản lý khu vực' data={BREADCRUMB} />
+        <AdminWrapper>
+            <Breadcrumb header='Quản lý quản lý quán' data={BREADCRUMB} />
             <Card title='Quản lý'>
                 <Table header={HEADER}>
                     {data && data.map((item, index) => (
@@ -121,6 +123,7 @@ function StaffManagement() {
                             <td>{inputHandler.date(item.birthday)}</td>
                             <td>{item.gender}</td>
                             <td>{item.work_place?.data?.name}</td>
+                            <td>{item.work_place?.data?.address}</td>
                             <td>{item.phone_number}</td>
                             <td>{inputHandler.date(item.created_at)}</td>
                             <td>{inputHandler.date(item.updated_at)}</td>
@@ -162,25 +165,25 @@ function StaffManagement() {
             {showModal &&
                 <Modal className={cx('modal', { delete: isDelete })}>
                     {!isDelete ? (
-                    <StaffForm 
+                    <ShopManagerForm 
                         item={item} 
-                        role='area_manager' 
+                        role='shop_manager' 
                         onClose={handleCloseModal} 
                         updateData={updateData}
-                        service={''}
+                        service={userService}
                     />
                     ) : (
                         <DeleteForm 
                             item={item}
                             onClose={handleCloseModal}
                             updateData={updateData}
-                            service={''}
+                            service={userService}
                         />
                     )}
                 </Modal>
             }
-        </div>
+        </AdminWrapper>
     );
 }
 
-export default StaffManagement;
+export default ShopManagerManagement;
