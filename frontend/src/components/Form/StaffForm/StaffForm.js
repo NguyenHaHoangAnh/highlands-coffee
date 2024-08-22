@@ -9,13 +9,14 @@ import { inputHandler } from "~/middlewares/inputHandler";
 import { toast } from 'react-toastify';
 import { AuthUserContext } from '~/components/AuthUserProvider';
 
+import * as areaService from '~/services/areaService';
 import * as shopService from '~/services/shopService';
 
 const cx = classNames.bind(styles);
 
 function StaffForm({ item, role, onClose = () => {}, updateData = () => {}, service }) {
-    const context = useContext(AuthUserContext);
-    const user = context && context?.user;
+    const authContext = useContext(AuthUserContext);
+    const user = authContext && authContext?.user;
     
     const [inputs, setInputs] = useState({
         name: item !== undefined ? item.name : '',
@@ -27,7 +28,7 @@ function StaffForm({ item, role, onClose = () => {}, updateData = () => {}, serv
         username: item !== undefined ? item.username : '',
         password: item !== undefined ? item.password : '',
     });
-    const [shop, setShop] = useState()
+    const [workPlace, setWorkPlace] = useState()
 
     const handleInputChange = (target) => {
         const { name, value } = target;
@@ -38,15 +39,30 @@ function StaffForm({ item, role, onClose = () => {}, updateData = () => {}, serv
     }
     
     const fetchData = () => {
-        shopService
-            .getAllItem()
-            .then((data) => {
-                setShop(data.data);
-            });
+        if (role === 'area_manager') {
+            areaService
+                .getAvailableItem()
+                .then((data) => {
+                    setWorkPlace(data.data);
+                });
+        } else if (role === 'shop_manager') {
+            shopService
+                .getAvailableItem()
+                .then((data) => {
+                    setWorkPlace(data.data);
+                });
+        } else {
+            shopService
+                .getAllItem()
+                .then((data) => {
+                    setWorkPlace(data.data);
+                });
+        }
     }
 
     useEffect(() => {
         fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     
     
@@ -164,16 +180,20 @@ function StaffForm({ item, role, onClose = () => {}, updateData = () => {}, serv
                     label='Chức vụ'
                     inline
                     name='role'
-                    value='Nhân viên'
+                    value={new Map([
+                        ['area_manager', 'Quản lý khu vực'],
+                        ['shop_manager', 'Quản lý quán'],
+                        ['staff', 'Nhân viên'],
+                    ]).get(role)}
                     readOnly
                 />
                 <Select 
                     className={cx('form-input')}
-                    data={shop}
+                    data={workPlace}
                     name='work_place'
                     value={inputs.work_place}
-                    defaultValue={item?.work_place?.data?.name || 'Chọn quán'}
-                    label='Quán'
+                    defaultValue={item?.work_place?.data?.name || ((role === 'area_manager') ? 'Chọn khu vực' : 'Chọn quán')}
+                    label={(role === 'area_manager') ? 'Khu vực' : 'Quán'}
                     inline
                     optionLabel='name'
                     optionValue='_id'

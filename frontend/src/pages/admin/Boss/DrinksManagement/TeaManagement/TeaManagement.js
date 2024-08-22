@@ -119,7 +119,7 @@ function TeaManagement() {
         <div>
             <Breadcrumb header='Tea' data={BREADCRUMB} />
             <Card title='Tea'>
-                <Table header={HEADER}>
+                <Table header={HEADER} fixedLast>
                     {data && data.map((item, index) => (
                         <tr key={item._id}>
                             <td>{index + 1}</td>

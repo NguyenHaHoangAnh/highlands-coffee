@@ -89,6 +89,19 @@ const shopController = {
         }
     },
 
+    // [POST] /shop/getByArea
+    async getByArea(req, res) {
+        try {
+            const shops = await Shop.find({ 'area._id': req.body.area });
+            if (!shops) 
+                return res.status(400).json({ error: 'Không tìm thấy Quán' });
+
+            return res.status(200).json({ data: shops, message: 'Lấy thông tin quán thành công' });
+        } catch (error) {
+            return res.status(400).json({ error });
+        }
+    }
+
 }
 
 module.exports = shopController;

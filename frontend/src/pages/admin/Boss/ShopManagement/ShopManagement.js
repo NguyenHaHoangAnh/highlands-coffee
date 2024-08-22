@@ -116,7 +116,7 @@ function ShopManagement() {
             <Breadcrumb header='Quản lý quán' data={BREADCRUMB} />
             <Card title='Quán'>
                 {/* <Select data={AREAS} defaultValue='Chọn khu vực' /> */}
-                <Table header={HEADER}>
+                <Table header={HEADER} fixedLast>
                     {data && data.map((item, index) => (
                         <tr key={item._id}>
                             <td>{index + 1}</td>

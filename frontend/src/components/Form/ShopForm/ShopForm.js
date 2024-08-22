@@ -15,8 +15,8 @@ import * as shopService from '~/services/shopService';
 const cx = classNames.bind(styles);
 
 function ShopForm({ item, onClose = () => {}, updateData = () => {} }) {
-    const context = useContext(AuthUserContext);
-    const user = context && context?.user;
+    const authContext = useContext(AuthUserContext);
+    const user = authContext && authContext?.user;
     const [inputs, setInputs] = useState({
         name: item !== undefined ? item.name : '',
         area: item !== undefined ? item.area?._id : ((user && user.role === 'area_manager') ? user.work_place._id : ''),

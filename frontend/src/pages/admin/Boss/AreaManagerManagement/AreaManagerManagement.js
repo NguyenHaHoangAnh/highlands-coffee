@@ -10,7 +10,7 @@ import Table from '~/components/Table';
 import Button from '~/components/Button';
 import Modal from '~/components/Modal';
 import Pagination from '~/components/Pagination';
-import AreaManagerForm from '~/components/Form/AreaManagerForm';
+import StaffForm from '~/components/Form/StaffForm';
 import DeleteForm from '~/components/Form/DeleteForm';
 import config from '~/config';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -114,7 +114,7 @@ function AreaManagerManagement() {
         <AdminWrapper>
             <Breadcrumb header='Quản lý quản lý khu vực' data={BREADCRUMB} />
             <Card title='Quản lý'>
-                <Table header={HEADER}>
+                <Table header={HEADER} fixedLast>
                     {data && data.map((item, index) => (
                         <tr key={item._id}>
                             <td>{index + 1}</td>
@@ -163,7 +163,7 @@ function AreaManagerManagement() {
             {showModal &&
                 <Modal className={cx('modal', { delete: isDelete })}>
                     {!isDelete ? (
-                    <AreaManagerForm 
+                    <StaffForm 
                         item={item} 
                         role='area_manager' 
                         onClose={handleCloseModal} 

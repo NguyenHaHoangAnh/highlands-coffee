@@ -3,7 +3,7 @@ import AdminWrapper from "../../components/AdminWrapper";
 function Dashboard() {
     return (
         <AdminWrapper>
-            Dashboard
+            SM Dashboard
         </AdminWrapper>
     );
 }

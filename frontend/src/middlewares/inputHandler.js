@@ -1,6 +1,6 @@
 export const inputHandler = {
     currency(value) {
-        if (!value)
+        if (value === undefined || value === null)
             return '';
         value = value.toString();
         value =  value.replace(/[^0-9\s]/g, '');
@@ -10,7 +10,7 @@ export const inputHandler = {
     },
 
     phone(value) {
-        if (!value)
+        if (value === undefined || value === null)
             return '';
         value = value.toString();
         value = value.replace(/[^0-9\s]/g, '');
@@ -29,20 +29,20 @@ export const inputHandler = {
     },
 
     currencyToNumber(value) {
-        if (!value)
+        if (value === undefined || value === null)
             return '';
         return Number(String(value).replaceAll(',', ''));
     },
 
     date(value) {
-        if (!value)
+        if (value === undefined || value === null)
             return '';
         const date = value.split('T').shift();
         return date.split('-').reverse().join('/');
     },
 
     systemDate(value) {
-        if (!value)
+        if (value === undefined || value === null)
             return '';
         const date = value.split('T').shift();
         return date.split('/').reverse().join('-');

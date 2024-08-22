@@ -84,6 +84,27 @@ a {
     text-decoration: none;
 }
 
+.status {
+    padding: 8px;
+    width: fit-content;
+    border-radius: 9999px;
+    
+    &--pending {
+        background-color: #fff0c2;
+        color: #ccb753;
+    }
+    
+    &--success {
+        background-color: #c8e6c9;
+        color: #6fb073;
+    }
+    
+    &--cancel {
+        background-color: #e6c8c8;
+        color: #b06f6f;
+    }
+}
+
 // Fonts embeded
 @font-face{
     font-family: HighlandFont;

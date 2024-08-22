@@ -48,8 +48,8 @@
     }
 
     // Fixed last column
-    & tr th:last-child,
-    & tr td:last-child {
+    &.fixed-last tr th:last-child,
+    &.fixed-last tr td:last-child {
         position: sticky;
         right: 0;
         background-color: var(--white);

@@ -33,8 +33,9 @@ const images = {
 
     // No image
     no_image: require('./no_image.png'),
-
     
+    // qr
+    qr: require('./qr.png'),
 };
 
 export default images;

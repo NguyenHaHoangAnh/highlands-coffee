@@ -114,8 +114,8 @@ function StaffManagement() {
     return (
         <AdminWrapper>
             <Breadcrumb header='Quản lý nhân viên' data={BREADCRUMB} />
-            <Card title='Quản lý'>
-                <Table header={HEADER}>
+            <Card title='Nhân viên'>
+                <Table header={HEADER} fixedLast>
                     {data && data.map((item, index) => (
                         <tr key={item._id}>
                             <td>{index + 1}</td>

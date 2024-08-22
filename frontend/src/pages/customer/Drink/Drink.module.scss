@@ -32,6 +32,24 @@
     border-radius: 8px;
 }
 
+.quantity {
+    font-size: 1.4rem;
+}
+
+.quantity-input {
+    border: 1px solid var(--black);
+    width: 72px;
+
+    & input {
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: button;//* Clear default arrow */
+        } 
+        &::-webkit-outer-spin-button {
+            -webkit-appearance: button;//* Clear default arrow */
+        }
+    }
+}
+
 .size {
     font-size: 1.4rem;
 }

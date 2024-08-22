@@ -28,7 +28,7 @@ function Drink() {
                                 <h3>
                                     <Button 
                                         to={config.routes.customer_coffee} 
-                                        onClick={() => handleClick(config.routes.customer_drinks)}
+                                        // onClick={() => handleClick(config.routes.customer_drinks)}
                                     >
                                         Cà phê
                                     </Button>
@@ -43,7 +43,7 @@ function Drink() {
                                     className={cx('btn')} 
                                     outline 
                                     to={config.routes.customer_coffee} 
-                                    onClick={() => handleClick(config.routes.customer_drinks)}
+                                    // onClick={() => handleClick(config.routes.customer_drinks)}
                                 >
                                     Khám phá thêm
                                 </Button>
@@ -52,7 +52,7 @@ function Drink() {
                         <Div className={cx('absolute', 'w-1/2', 'img-wrapper')}>
                             <Button 
                                 to={config.routes.customer_coffee} 
-                                onClick={() => handleClick(config.routes.customer_drinks)}
+                                // onClick={() => handleClick(config.routes.customer_drinks)}
                             >
                                 <img src={images.drinks_coffee} alt='coffee'/>
                             </Button>
@@ -67,7 +67,7 @@ function Drink() {
                                 <h3>
                                     <Button 
                                         to={config.routes.customer_freeze} 
-                                        onClick={() => handleClick(config.routes.customer_drinks)}
+                                        // onClick={() => handleClick(config.routes.customer_drinks)}
                                     >
                                         Freeze
                                     </Button>
@@ -82,7 +82,7 @@ function Drink() {
                                     className={cx('btn')} 
                                     outline 
                                     to={config.routes.customer_freeze} 
-                                    onClick={() => handleClick(config.routes.customer_drinks)}
+                                    // onClick={() => handleClick(config.routes.customer_drinks)}
                                 >
                                     Khám phá thêm
                                 </Button>
@@ -91,7 +91,7 @@ function Drink() {
                         <Div className={cx('absolute', 'w-1/2', 'img-wrapper')}>
                             <Button 
                                 to={config.routes.customer_freeze} 
-                                onClick={() => handleClick(config.routes.customer_drinks)}
+                                // onClick={() => handleClick(config.routes.customer_drinks)}
                             >
                                 <img src={images.drinks_freeze} alt='coffee'/>
                             </Button>
@@ -106,7 +106,7 @@ function Drink() {
                                 <h3>
                                     <Button 
                                         to={config.routes.customer_tea} 
-                                        onClick={() => handleClick(config.routes.customer_drinks)}
+                                        // onClick={() => handleClick(config.routes.customer_drinks)}
                                     >
                                         Trà
                                     </Button>
@@ -121,7 +121,7 @@ function Drink() {
                                     className={cx('btn')} 
                                     outline 
                                     to={config.routes.customer_tea} 
-                                    onClick={() => handleClick(config.routes.customer_drinks)}
+                                    // onClick={() => handleClick(config.routes.customer_drinks)}
                                 >
                                     Khám phá thêm
                                 </Button>
@@ -130,7 +130,7 @@ function Drink() {
                         <Div className={cx('absolute', 'w-1/2', 'img-wrapper')}>
                             <Button 
                                 to={config.routes.customer_tea} 
-                                onClick={() => handleClick(config.routes.customer_drinks)}
+                                // onClick={() => handleClick(config.routes.customer_drinks)}
                             >
                                 <img src={images.drinks_tea} alt='coffee'/>
                             </Button>

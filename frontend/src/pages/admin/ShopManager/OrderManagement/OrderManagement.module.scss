@@ -1,0 +1,22 @@
+.action-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+
+    & ~ .action-btn {
+        margin-left: 8px;
+    }
+}
+
+.submit-btn {
+    padding: 9px 16px;
+}
+
+// Modal
+.modal {
+    width: 80%;
+
+    &.delete {
+        width: 40%;
+    }
+}

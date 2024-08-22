@@ -84,3 +84,15 @@ export const deleteItem = async (id) => {
         return error.response.data;
     }
 }
+
+export const getItemByArea = async (area) => {
+    try {
+        const res = await httpRequest.post('shop/getByArea', {
+            area,
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+        return error.response.data;
+    }
+}

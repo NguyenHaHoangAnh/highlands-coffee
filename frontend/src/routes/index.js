@@ -6,12 +6,14 @@ import Customer_Drinks from '~/pages/customer/Drinks';
 import Customer_Freeze from '~/pages/customer/Freeze';
 import Customer_Coffee from '~/pages/customer/Coffee';
 import Customer_Tea from '~/pages/customer/Tea';
+import Customer_Order from '~/pages/customer/Order';
+import Customer_OrderResearch from '~/pages/customer/OrderResearch';
 import Customer_Drink from '~/pages/customer/Drink';
 
 // Admin
 import Admin_Authentication from '~/pages/admin/components/Authentication';
 import Admin_Profile from '~/pages/admin/components/Profile';
-import Admin_Dashboard from '~/pages/admin/Boss/Dashboard';
+import Admin_Dashboard from '~/pages/admin/components/Dashboard';
 // Boss
 import Boss_AreaManagement from '~/pages/admin/Boss/AreaManagement';
 import Boss_AreaManagerManagement from '~/pages/admin/Boss/AreaManagerManagement';
@@ -22,6 +24,7 @@ import Area_Manager_ShopManagement from '~/pages/admin/AreaManager/ShopManagemen
 import Area_Manager_ShopManagerManagement from '~/pages/admin/AreaManager/ShopManagerManagement';
 // Shop Manager
 import Shop_Manager_StaffManagement from '~/pages/admin/ShopManager/StaffManagement';
+import Shop_Manager_OrderManagement from '~/pages/admin/ShopManager/OrderManagement';
 
 import { AdminLayout } from '~/layouts';
 
@@ -35,6 +38,8 @@ const publicRoutes = [
     { path: config.routes.customer_freeze, component: Customer_Freeze },
     { path: config.routes.customer_coffee, component: Customer_Coffee },
     { path: config.routes.customer_tea, component: Customer_Tea },
+    { path: config.routes.customer_order, component: Customer_Order },
+    { path: config.routes.customer_order_research, component: Customer_OrderResearch },
     { path: config.routes.customer_drink, component: Customer_Drink },
 ];
 
@@ -54,6 +59,7 @@ const privateRoutes = [
     { path: config.routes.area_manager_shop_manager_management, component: Area_Manager_ShopManagerManagement, layout: AdminLayout },
     // Shop Manager
     { path: config.routes.shop_manager_staff_management, component: Shop_Manager_StaffManagement, layout: AdminLayout },
+    { path: config.routes.shop_manager_order_management, component: Shop_Manager_OrderManagement, layout: AdminLayout },
 
 ];
 

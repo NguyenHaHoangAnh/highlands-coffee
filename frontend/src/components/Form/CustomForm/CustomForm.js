@@ -7,7 +7,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 const cx = classNames.bind(styles);
 
-function CustomForm({ className, title, children, onClose, onSubmit }) {
+function CustomForm({ className, title, children, submitLabel, onClose, onSubmit }) {
     return (
         <div className={cx('w-full', 'wrapper', className)}>
             <div className={cx('container')}>
@@ -29,7 +29,7 @@ function CustomForm({ className, title, children, onClose, onSubmit }) {
                         primary 
                         onClick={onSubmit}
                     >
-                        Lưu
+                    {submitLabel || 'Lưu'}
                     </Button>
                 </main>
             </div>

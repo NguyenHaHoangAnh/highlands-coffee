@@ -10,7 +10,7 @@ import Table from '~/components/Table';
 import Button from '~/components/Button';
 import Modal from '~/components/Modal';
 import Pagination from '~/components/Pagination';
-import ShopManagerForm from '~/components/Form/ShopManagerForm';
+import StaffForm from '~/components/Form/StaffForm';
 import DeleteForm from '~/components/Form/DeleteForm';
 import config from '~/config';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -115,7 +115,7 @@ function ShopManagerManagement() {
         <AdminWrapper>
             <Breadcrumb header='Quản lý quản lý quán' data={BREADCRUMB} />
             <Card title='Quản lý'>
-                <Table header={HEADER}>
+                <Table header={HEADER} fixedLast>
                     {data && data.map((item, index) => (
                         <tr key={item._id}>
                             <td>{index + 1}</td>
@@ -165,7 +165,7 @@ function ShopManagerManagement() {
             {showModal &&
                 <Modal className={cx('modal', { delete: isDelete })}>
                     {!isDelete ? (
-                    <ShopManagerForm 
+                    <StaffForm 
                         item={item} 
                         role='shop_manager' 
                         onClose={handleCloseModal} 

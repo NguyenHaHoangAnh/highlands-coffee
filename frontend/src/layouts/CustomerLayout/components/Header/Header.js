@@ -167,7 +167,17 @@ const MENU = [
     },
     {
         title: 'Mua ngay',
-        to: '/f',
+        to: config.routes.customer_order,
+        children: [
+            {
+                title: 'Giỏ hàng của tôi',
+                to: config.routes.customer_order,
+            },
+            {
+                title: 'Tra cứu đơn hàng',
+                to: config.routes.customer_order_research,
+            },
+        ]
     },
     {
         title: 'Thẻ',
@@ -204,8 +214,8 @@ const ROLE = {
 
 function Header() {
     // const headerContext = useContext(HeaderContext);
-    const context = useContext(AuthUserContext);
-    const user = context && context?.user;
+    const authContext = useContext(AuthUserContext);
+    const user = authContext && authContext?.user;
     
     const navigate = useNavigate();
 
@@ -225,7 +235,7 @@ function Header() {
                             toast.success(data?.message);
                             localStorage.removeItem('token');
                             localStorage.removeItem('id');
-                            context.handleChangeUser();
+                            authContext.handleChangeUser();
                             setTimeout(() => {
                                 navigate(config.routes.customer_home);
                             }, 200);

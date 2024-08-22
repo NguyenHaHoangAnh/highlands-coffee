@@ -113,7 +113,7 @@ function AreaManagement() {
         <AdminWrapper>
             <Breadcrumb header='Quản lý khu vực' data={BREADCRUMB} />
             <Card title='Khu vực'>
-                <Table header={HEADER}>
+                <Table header={HEADER} fixedLast>
                     {data && data.map((item, index) => (
                         <tr key={item._id}>
                             <td>{index + 1}</td>

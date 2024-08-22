@@ -15,8 +15,8 @@ const cx = classNames.bind(styles);
 function Sidebar() {
     const [subMenu, setSubMenu] = useState([]);
     const menuRef = useRef();
-    const context = useContext(AuthUserContext);
-    const user = context && context?.user;
+    const authContext = useContext(AuthUserContext);
+    const user = authContext && authContext?.user;
 
     // Find all sub menus
     useEffect(() => {
@@ -74,6 +74,7 @@ function Sidebar() {
                 ['boss', <BossMenu menuRef={menuRef} toggleSubMenu={toggleSubMenu} />],
                 ['area_manager', <AreaManagerMenu menuRef={menuRef} toggleSubMenu={toggleSubMenu} />],
                 ['shop_manager', <ShopManagerMenu menuRef={menuRef} toggleSubMenu={toggleSubMenu} />],
+                ['staff', <StaffMenu menuRef={menuRef} toggleSubMenu={toggleSubMenu} />],
             ]).get(user.role.toLowerCase())}
         </div>
     );
@@ -119,6 +120,19 @@ function ShopManagerMenu({ menuRef, toggleSubMenu }) {
             <Menu className={cx('flex-1 overflow-auto')} ref={menuRef}>
                 <MenuItem className={cx('menu-item')} to={config.routes.admin_dashboard} icon={<FontAwesomeIcon icon={faHouse} />} title='Trang chủ' />
                 <MenuItem className={cx('menu-item')} to={config.routes.shop_manager_staff_management} icon={<FontAwesomeIcon icon={faUserGroup} />} title='Quản lý nhân viên' />
+                <MenuItem className={cx('menu-item')} to={config.routes.shop_manager_order_management} icon={<FontAwesomeIcon icon={faMugHot} />} title='Quản lý đơn hàng' />
+            </Menu>
+            <MenuItem className={cx('menu-item', 'separate')} to={config.routes.customer_home} icon={<FontAwesomeIcon icon={faDoorOpen} />} title='Thoát' />
+        </>
+    );
+}
+
+function StaffMenu({ menuRef, toggleSubMenu }) {
+    return (
+        <>
+            <Menu className={cx('flex-1 overflow-auto')} ref={menuRef}>
+                <MenuItem className={cx('menu-item')} to={config.routes.admin_dashboard} icon={<FontAwesomeIcon icon={faHouse} />} title='Trang chủ' />
+                <MenuItem className={cx('menu-item')} to={config.routes.shop_manager_order_management} icon={<FontAwesomeIcon icon={faMugHot} />} title='Quản lý đơn hàng' />
             </Menu>
             <MenuItem className={cx('menu-item', 'separate')} to={config.routes.customer_home} icon={<FontAwesomeIcon icon={faDoorOpen} />} title='Thoát' />
         </>

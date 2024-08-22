@@ -1,5 +1,5 @@
 .wrapper {
-    &:not(.small).inline {
+    &.inline {
         display: grid;
         grid-template-columns: 80px auto;
         margin-bottom: 24px;
@@ -10,8 +10,14 @@
         grid-template-columns: 50px auto;
         margin-bottom: 24px;
     }
+    
+    &.big.inline {
+        display: grid;
+        grid-template-columns: 120px auto;
+        margin-bottom: 24px;
+    }
 
-    &:not(.big).inline .label {
+    &:not(.bigText).inline .label {
         display: flex;
         align-items: center;
         margin-right: 8px;
@@ -23,15 +29,15 @@
     }
 
     // textarea
-    &.big .container {
+    &.bigText .container {
         height: fit-content;
     }
 
-    &.big.inline .label {
+    &.bigText.inline .label {
         margin-top: 10px;
     }
 
-    &.big .input {
+    &.bigText .input {
         overflow-y: overlay;
     }
 }

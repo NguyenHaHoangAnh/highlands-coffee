@@ -45,8 +45,8 @@ const ROLE = {
 };
 
 function Header() {
-    const context = useContext(AuthUserContext);
-    const user = context && context?.user;
+    const authContext = useContext(AuthUserContext);
+    const user = authContext && authContext?.user;
 
     const navigate = useNavigate();
 
@@ -61,7 +61,7 @@ function Header() {
                             toast.success(data?.message);
                             localStorage.removeItem('token');
                             localStorage.removeItem('id');
-                            context.handleChangeUser();
+                            authContext.handleChangeUser();
                             setTimeout(() => {
                                 navigate(config.routes.customer_home);
                             }, 200);

@@ -3,11 +3,11 @@ import styles from './Table.module.scss';
 
 const cx = classNames.bind(styles);
 
-function Table({ header = [], children }) {
+function Table({ header = [], children, fixedLast = false }) {
     return (
         <div className={cx('w-full', 'wrapper')}>
             <div className={cx('container')}>
-                <table className={cx('w-full', 'text-left', 'table')} rules='rows'>
+                <table className={cx('w-full text-left', 'table', { 'fixed-last': fixedLast })} rules='rows'>
                     <thead>
                         <tr>
                             {header.map((header, index) => (

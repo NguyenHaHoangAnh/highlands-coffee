@@ -13,8 +13,9 @@ function Input({
     onChange = () => {},
     label,
     inline = false,
-    big = false,
+    bigText = false,
     small = false,
+    big = false,
     children,
     ...otherProps
 }) {
@@ -22,10 +23,10 @@ function Input({
     return (
         <>
             {label ? (
-                <div className={cx('wrapper', wrapperClass, { inline, big, small })}>
+                <div className={cx('wrapper', wrapperClass, { inline, bigText, small, big })}>
                     <label className={cx('font-semibold','label')} htmlFor={id}>{label}</label>
                     <div className={cx('container', className)}>
-                        {big ? (
+                        {bigText ? (
                             <textarea 
                                 rows={3}
                                 id={id}
@@ -53,7 +54,7 @@ function Input({
                 </div>
             ) : (
                 <div className={cx('container', className)}>
-                    {big ? (
+                    {bigText ? (
                         <textarea
                             rows={3}
                             id={id}

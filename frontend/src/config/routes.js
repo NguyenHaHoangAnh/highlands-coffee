@@ -5,6 +5,8 @@ const route = {
     customer_freeze: '/freeze',
     customer_coffee: '/ca-phe',
     customer_tea: '/tra',
+    customer_order: '/don-hang',
+    customer_order_research: '/tra-cuu-don-hang',
     customer_drink: '/:drink',
 
     // Admin
@@ -23,6 +25,7 @@ const route = {
     area_manager_shop_manager_management: '/quan-ly-quan-ly-quan',
     // Shop Manager
     shop_manager_staff_management: '/quan-ly-nhan-vien',
+    shop_manager_order_management: '/quan-ly-don-hang',
 };
 
 export default route;

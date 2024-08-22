@@ -1,11 +1,12 @@
 import { useContext } from 'react';
 import { AuthUserContext } from '~/components/AuthUserProvider';
-import BossDashBoard from '~/Boss/Dashboard';
-import AreaManagerDashBoard from '~/AreaManager/Dashboard';
+import BossDashBoard from '~/pages/admin/Boss/Dashboard';
+import AreaManagerDashBoard from '~/pages/admin/AreaManager/Dashboard';
+import ShopManagerDashBoard from '~/pages/admin/ShopManager/Dashboard';
 
 function Dashboard() {
-    const context = useContext(AuthUserContext);
-    const user = context && context?.user;
+    const authContext = useContext(AuthUserContext);
+    const user = authContext && authContext?.user;
 
     return (
         <>
@@ -13,6 +14,8 @@ function Dashboard() {
                 ['admin', <BossDashBoard />],
                 ['boss', <BossDashBoard />],
                 ['area_manager', <AreaManagerDashBoard />],
+                ['shop_manager', <ShopManagerDashBoard />],
+                ['staff', <ShopManagerDashBoard />],
             ]).get(user.role.toLowerCase())}
         </>
     );

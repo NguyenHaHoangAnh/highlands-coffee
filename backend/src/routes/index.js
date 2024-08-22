@@ -5,6 +5,7 @@ const userRouter = require('./user.route');
 const authRouter = require('./auth.route');
 const areaRouter = require('./area.route');
 const shopRouter = require('./shop.route');
+const orderRouter = require('./order.route');
 
 const route = (app) => {
     app.use('/freeze', freezeRouter);
@@ -13,6 +14,7 @@ const route = (app) => {
     app.use('/user', userRouter);
     app.use('/area', areaRouter);
     app.use('/shop', shopRouter);
+    app.use('/order', orderRouter);
     app.use('/', authRouter);
 }
 

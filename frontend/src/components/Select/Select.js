@@ -29,6 +29,7 @@ function Select({
     const selectRef = useRef();
 
     useEffect(() => {
+        // Lấy value và label trong data lần đầu nếu value != default value
         const selectedItem = data.find((item) => item[optionValue] === selectedValue);
         if (selectedItem) {
             setSelectedLabel(selectedItem[optionLabel]);
@@ -43,11 +44,20 @@ function Select({
     }
 
     useEffect(() => {
+        // Thay đổi value
         if (selectRef.current) {
             onChange(selectRef.current);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedValue, selectRef]);
+
+    useEffect(() => {
+        // nếu value = default => value và label = default
+        if (value === defaultValue) {
+            setSelectedLabel(defaultValue);
+            setSelectedValue(value);
+        }
+    }, [value, defaultValue]);
 
     return (
         <>

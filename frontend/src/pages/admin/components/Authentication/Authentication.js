@@ -23,7 +23,7 @@ function Authentication() {
     });
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
-    const context = useContext(AuthUserContext);
+    const authContext = useContext(AuthUserContext);
     
 
     const handleInputChange = (target) => {
@@ -52,9 +52,9 @@ function Authentication() {
                         .getUserById(res.id)
                         .then((res) => {
                             if (res?.message) {
-                                context.handleChangeUser(res?.data);
+                                authContext.handleChangeUser(res?.data);
                             } else {
-                                context.handleChangeUser();
+                                authContext.handleChangeUser();
                             }
                         })
                     setTimeout(() => {

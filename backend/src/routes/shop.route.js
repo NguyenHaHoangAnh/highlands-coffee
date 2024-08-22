@@ -8,6 +8,7 @@ router.put('/update/:id', shopController.update);
 router.delete('/delete/:id', shopController.delete);
 router.get('/available', shopController.getAvailableItem);
 router.get('/:id', shopController.getItemById);
+router.post('/getByArea', shopController.getByArea);
 router.get('/', shopController.get);
 
 module.exports = router

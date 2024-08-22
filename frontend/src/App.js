@@ -14,22 +14,22 @@ import * as userService from '~/services/userService';
 function App() {
   const userId = window.localStorage.getItem('id');
   const token = window.localStorage.getItem('token');
-  const context = useContext(AuthUserContext);
+  const authContext = useContext(AuthUserContext);
   
   useEffect(() => {
     if (tokenHandler.isTokenExpired(token)) {
       window.localStorage.removeItem('token');
       window.localStorage.removeItem('id');
-      context.handleChangeUser();
+      authContext.handleChangeUser();
     } else {
       if (userId) {
         userService
           .getUserById(userId)
           .then((res) => {
             if (res?.message) {
-              context.handleChangeUser(res?.data);
+              authContext.handleChangeUser(res?.data);
             } else {
-              context.handleChangeUser();
+              authContext.handleChangeUser();
             }
           })
       }

@@ -1,0 +1,33 @@
+.tab {
+    position: relative;
+    display: flex;
+    width: 100%;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.tab-btn +
+.tab-btn {
+    margin-left: 0;
+}
+
+.tab-btn {
+    padding: 0 32px;
+    font-size: 1.8rem;
+    line-height: 4.4rem;
+    background-color: transparent;
+
+    &.disable {
+        opacity: 0.5;
+    }
+}
+
+.tab-line {
+    position: absolute;
+    left: 0;
+    top: calc(100% - 0.5px);
+    content: '';
+    display: block;
+    height: 2px;
+    background-color: var(--black);
+    transition: all 0.2s ease;
+}

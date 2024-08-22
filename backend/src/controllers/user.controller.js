@@ -115,6 +115,9 @@ const userController = {
             const area_managers = await userFinder.findUserByRole('area_manager');
             if (!area_managers) 
                 return res.status(404).json({ error: 'Không tìm thấy Quản lý khu vực' });
+            
+            if (area_managers.length === 0) 
+                return res.status(200).json({ error: 'Không tìm thấy Quản lý khu vực' });
 
             // Check if url not has query => return all
             if (!req.query.page && !req.query.perPage)
@@ -136,6 +139,9 @@ const userController = {
             if (!shop_managers) 
                 return res.status(404).json({ error: 'Không tìm thấy Quản lý quán' });
 
+            if (shop_managers.length === 0) 
+                return res.status(200).json({ error: 'Không tìm thấy Quản lý quán' });
+
             // Check if url not has query => return all
             if (!req.query.page && !req.query.perPage)
                 return res.status(200).json({ data: shop_managers, message: 'Lấy thông tin Quản lý quán thành công' });
@@ -155,6 +161,9 @@ const userController = {
             const staff = await userFinder.findUserByRole('staff');
             if (!staff) 
                 return res.status(404).json({ error: 'Không tìm thấy Nhân viên' });
+
+            if (staff.length === 0) 
+                return res.status(200).json({ error: 'Không tìm thấy Nhân viên' });
 
             // Check if url not has query => return all
             if (!req.query.page && !req.query.perPage)
